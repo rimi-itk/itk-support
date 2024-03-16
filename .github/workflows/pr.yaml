@@ -1,0 +1,90 @@
+on: pull_request
+name: Review
+jobs:
+  changelog:
+    runs-on: ubuntu-latest
+    name: Changelog should be updated
+    strategy:
+      fail-fast: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Git fetch
+        run: git fetch
+      - name: Check that changelog has been updated.
+        run: git diff --exit-code origin/${{ github.base_ref }} -- CHANGELOG.md && exit 1 || exit 0
+
+  composer-validate:
+    name: Validate composer
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@master
+      - run: docker network create frontend
+      - run: docker compose up --detach
+      - name: Validate composer
+        run: docker compose run --rm phpfpm composer validate
+
+  composer-normalize:
+    name: Normalize composer
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@master
+      - run: docker network create frontend
+      - run: docker compose up --detach
+      - run: docker compose exec --user root phpfpm composer install
+      - name: Normalize composer
+        # https://github.com/ergebnis/composer-normalize?tab=readme-ov-file#continuous-integration
+        run: docker compose run --rm phpfpm composer normalize --dry-run
+
+  coding-standards-check_php-cs-fixer:
+    name: coding-standards-check/php-cs-fixer
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@master
+      - run: docker network create frontend
+      - run: docker compose up --detach
+      - run: docker compose exec --user root phpfpm composer install
+      - name: coding-standards-check/php-cs-fixer
+        run: docker compose exec --user root phpfpm composer coding-standards-check/php-cs-fixer
+
+  coding-standards-check_twig-cs-fixer:
+    name: coding-standards-check/twig-cs-fixer
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@master
+      - run: docker network create frontend
+      - run: docker compose up --detach
+      - run: docker compose exec --user root phpfpm composer install
+      - name: coding-standards-check/twig-cs-fixer
+        run: docker compose exec --user root phpfpm composer coding-standards-check/twig-cs-fixer
+
+  coding-standards-check_markdownlint:
+    name: coding-standards-check/markdownlint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - run: docker network create frontend
+      - run: docker compose run --rm node yarn install
+      - name: coding-standards-check/markdownlint
+        run: docker compose run --rm node yarn coding-standards-check/markdownlint
+
+  code-analysis-phpstan:
+    name: code-analysis/phpstan
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@master
+      - run: docker network create frontend
+      - run: docker compose up --detach
+      - run: docker compose exec --user root phpfpm composer install
+      - name: code-analysis/phpstan
+        run: docker compose exec --user root phpfpm composer code-analysis/phpstan
