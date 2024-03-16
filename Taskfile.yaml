@@ -1,0 +1,32 @@
+version: '3'
+
+tasks:
+  dev:start:
+    cmds:
+      - docker compose pull
+      - docker compose up --build --detach --remove-orphans
+      - docker compose exec phpfpm composer install
+      - task: dev:db:migrate
+
+  dev:db:migrate:
+    cmds:
+      - docker compose exec phpfpm php bin/console doctrine:migrations:migrate --no-interaction
+
+  dev:reset:
+    prompt: This we reset your databases. Do you want to continue?
+    cmds:
+      - docker compose down --remove-orphans
+      - task: dev:start
+
+  dev:db:update-dumps:
+    cmds:
+      - task: dev:db:update-dump:uvdesk
+      - task: dev:db:update-dump:leantime
+
+  dev:db:update-dump:uvdesk:
+    cmds:
+      - docker compose exec phpfpm mysqldump --single-transaction --column-statistics=0 --skip-extended-insert --complete-insert --host=mariadb --user=db --password=db db > .docker/dumps/uvdesk/db.sql
+
+  dev:db:update-dump:leantime:
+    cmds:
+      - docker compose exec leantime mysqldump --single-transaction --host=leantime-db --skip-extended-insert --complete-insert --user=db --password=db db > .docker/dumps/leantime/db.sql

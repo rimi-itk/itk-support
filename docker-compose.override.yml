@@ -16,6 +16,7 @@ services:
   leantime:
     image: leantime/leantime:latest
     networks:
+      - app
       - frontend
       - leantime
     depends_on:
@@ -34,6 +35,8 @@ services:
       - "traefik.http.services.${COMPOSE_PROJECT_NAME}_leantime.loadbalancer.server.port=80"
       # - "traefik.http.routers.${COMPOSE_PROJECT_NAME}_leantime.middlewares=redirect-to-https"
       # - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+    # Let this container be accessible both internally and externally on the same domain.
+    container_name: leantime.${COMPOSE_DOMAIN}
 
   leantime-db:
     image: itkdev/mariadb:latest
