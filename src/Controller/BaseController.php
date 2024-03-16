@@ -3,12 +3,12 @@
 namespace App\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Webkul\UVDesk\CoreFrameworkBundle\Entity\Website;
+use Symfony\Component\Routing\Annotation\Route;
 use Webkul\UVDesk\CoreFrameworkBundle\Entity\SupportRole;
 use Webkul\UVDesk\CoreFrameworkBundle\Entity\UserInstance;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Webkul\UVDesk\CoreFrameworkBundle\Entity\Website;
 
 class BaseController extends AbstractController
 {
@@ -26,7 +26,7 @@ class BaseController extends AbstractController
 
             if (!empty($ownerSupportRole) || !empty($administratorSupportRole)) {
                 $userInstanceRepository = $entityManager->getRepository(UserInstance::class);
-                
+
                 // If support roles are present, we'll check if any users exists with the administrator role.
                 $owners = $userInstanceRepository->findBySupportRole($ownerSupportRole);
                 $administrators = $userInstanceRepository->findBySupportRole($administratorSupportRole);
@@ -55,7 +55,7 @@ class BaseController extends AbstractController
         } catch (\Exception $e) {
             // ...
         }
-        
-        return $this->forward(ConfigureHelpdesk::class . "::load");
+
+        return $this->forward(ConfigureHelpdesk::class.'::load');
     }
 }

@@ -18,11 +18,11 @@ class TicketHelper
         private readonly Environment $twig,
         private readonly UrlGeneratorInterface $router,
         private readonly array $options
-    )
-    {
+    ) {
     }
 
-    public function handleTicket(Ticket $ticket): array {
+    public function handleTicket(Ticket $ticket): array
+    {
         $values = [
                 'headline' => $this->renderTicketTemplate('headline', $ticket),
                 'description' => $this->renderTicketTemplate('description', $ticket),
@@ -57,7 +57,8 @@ class TicketHelper
         return $response;
     }
 
-    private function renderTicketTemplate(string $name, Ticket $ticket): string {
+    private function renderTicketTemplate(string $name, Ticket $ticket): string
+    {
         $template = $this->twig->createTemplate($this->options['ticket']['templates'][$name]);
 
         return $template->render(
@@ -65,7 +66,8 @@ class TicketHelper
         );
     }
 
-    private function getTicketRenderContext(Ticket $ticket): array {
+    private function getTicketRenderContext(Ticket $ticket): array
+    {
         $context = [
             'ticket' => $ticket,
             // Make ticket URL readily available
@@ -73,7 +75,7 @@ class TicketHelper
                 'ticketId' => $ticket->getId(),
             ], UrlGeneratorInterface::ABSOLUTE_URL),
         ]
-            +($this->ticketService->getTicketInitialThreadDetails($ticket) ?? []);
+            + ($this->ticketService->getTicketInitialThreadDetails($ticket) ?? []);
 
         return $context;
     }

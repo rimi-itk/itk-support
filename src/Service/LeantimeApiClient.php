@@ -12,11 +12,11 @@ final class LeantimeApiClient
     public function __construct(
         private readonly HttpClientInterface $client,
         private readonly array $options
-    )
-    {
+    ) {
     }
 
-    public function getTicketUrl(int $id): string {
+    public function getTicketUrl(int $id): string
+    {
         return $this->options['url'].'#/tickets/showTicket/'.$id;
     }
 
@@ -28,7 +28,8 @@ final class LeantimeApiClient
         ]);
     }
 
-    private function post(string $method, array $params = []): array {
+    private function post(string $method, array $params = []): array
+    {
         $url = $this->options['url'].self::API_PATH_JSONRPC;
         $response = $this->client->request(Request::METHOD_POST, $url, [
             'headers' => [
@@ -39,7 +40,7 @@ final class LeantimeApiClient
                 'method' => $method,
                 'id' => uniqid(),
                 'params' => $params,
-            ]
+            ],
         ]);
 
         return $response->toArray();

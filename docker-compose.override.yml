@@ -51,3 +51,13 @@ services:
       - MYSQL_USER=db
       - MYSQL_PASSWORD=db
       - MYSQL_DATABASE=db
+
+  node:
+    image: node:20
+    profiles:
+      - dev
+    networks:
+      - app
+    volumes:
+      - .:/app:delegated
+    working_dir: /app

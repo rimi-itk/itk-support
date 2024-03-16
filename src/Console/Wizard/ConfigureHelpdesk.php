@@ -2,25 +2,25 @@
 
 namespace App\Console\Wizard;
 
-use Doctrine\ORM\Tools\Setup;
-use Doctrine\ORM\EntityManager;
 use Doctrine\DBAL\DBALException;
-use Symfony\Component\Dotenv\Dotenv;
-use Symfony\Component\Process\Process;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Tools\Setup;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\Question;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
 
 class ConfigureHelpdesk extends Command
 {
-    CONST CLS = "\033[H"; // Clear screen
-    CONST CLL = "\033[K"; // Clear line
-    CONST MCH = "\033[2J"; // Move cursor home
-    CONST MCA = "\033[1A"; // Move cursor up one point
+    public const CLS = "\033[H"; // Clear screen
+    public const CLL = "\033[K"; // Clear line
+    public const MCH = "\033[2J"; // Move cursor home
+    public const MCA = "\033[1A"; // Move cursor up one point
 
     private $container;
     private $entityManager;
@@ -57,12 +57,12 @@ class ConfigureHelpdesk extends Command
         list($db_host, $db_port, $db_name, $db_user, $db_password) = $this->getUpdatedDatabaseCredentials();
 
         // Check 1: Verify database connection
-        $output->writeln("  [-] Establishing a connection with database server");
+        $output->writeln('  [-] Establishing a connection with database server');
 
         list($isServerAccessible, $isDatabaseAccessible) = $this->refreshDatabaseConnection($db_host, $db_port, $db_name, $db_user, $db_password);
 
         if (false == $isServerAccessible || false == $isDatabaseAccessible) {
-            $output->writeln("<fg=red;>  [x]</> Unable to establish a connection with database server</>");
+            $output->writeln('<fg=red;>  [x]</> Unable to establish a connection with database server</>');
 
             // Interactively prompt user to re-configure their database
             $interactiveQuestion = new Question("\n      <comment>Proceed with re-configuring your database credentials? [Y/N]</comment> ", 'Y');
@@ -74,13 +74,13 @@ class ConfigureHelpdesk extends Command
                 do {
                     $continue = false;
                     $output->writeln("\n      <comment>Please enter the following details:</comment>\n");
-    
-                    $db_host = $this->askInteractiveQuestion("<info>Database Host</info>: ", '127.0.0.1', 6, false, false, "Please enter a host address");
-                    $db_port = $this->askInteractiveQuestion("<info>Database Port</info>: ", '3306', 6, false, false, "Please enter a host port number");
-                    $db_name = $this->askInteractiveQuestion("<info>Database Name</info>: ", null, 6, false, false, "Please enter name of the database you wish to connect with");
-                    $db_user = $this->askInteractiveQuestion("<info>Database User Name</info>: ", null, 6, false, false, "Please enter your user name to connect with the database");
-                    $db_password = $this->askInteractiveQuestion("<info>Database User Password</info>: ", null, 6, false, true, "Please enter your user password to connect with the database");
-    
+
+                    $db_host = $this->askInteractiveQuestion('<info>Database Host</info>: ', '127.0.0.1', 6, false, false, 'Please enter a host address');
+                    $db_port = $this->askInteractiveQuestion('<info>Database Port</info>: ', '3306', 6, false, false, 'Please enter a host port number');
+                    $db_name = $this->askInteractiveQuestion('<info>Database Name</info>: ', null, 6, false, false, 'Please enter name of the database you wish to connect with');
+                    $db_user = $this->askInteractiveQuestion('<info>Database User Name</info>: ', null, 6, false, false, 'Please enter your user name to connect with the database');
+                    $db_password = $this->askInteractiveQuestion('<info>Database User Password</info>: ', null, 6, false, true, 'Please enter your user password to connect with the database');
+
                     $output->write([self::MCA, self::CLL, self::MCA, self::CLL, self::MCA, self::CLL]);
 
                     list($isServerAccessible, $isDatabaseAccessible) = $this->refreshDatabaseConnection($db_host, $db_port, $db_name, $db_user, $db_password);
@@ -93,17 +93,17 @@ class ConfigureHelpdesk extends Command
                         }
 
                         $output->write([self::MCA, self::CLL, self::MCA, self::CLL, self::MCA, self::CLL]);
-                    } else if (false == $isDatabaseAccessible) {
+                    } elseif (false == $isDatabaseAccessible) {
                         $interactiveQuestion = new Question("\n      <comment>Database <comment>$db_name</comment> does not exist. Proceed with creating database? [Y/N]</comment> ", 'Y');
 
                         if ('Y' === strtoupper($this->questionHelper->ask($input, $output, $interactiveQuestion))) {
                             $output->write([self::MCA, self::CLL, self::MCA, self::CLL]);
-                            
+
                             // Create Database
                             if (false == $this->createDatabase($db_host, $db_port, $db_name, $db_user, $db_password)) {
                                 $output->writeln([
                                     "<fg=red;>  [x]</> An unexpected error occurred while trying to create database <comment>$db_name</comment>.</>",
-                                    "\n  Exiting evaluation process.\n"
+                                    "\n  Exiting evaluation process.\n",
                                 ]);
                             }
                         } else {
@@ -123,20 +123,20 @@ class ConfigureHelpdesk extends Command
                 list($isServerAccessible, $isDatabaseAccessible) = $this->refreshDatabaseConnection($db_host, $db_port, $db_name, $db_user, $db_password);
 
                 if (true == $isServerAccessible && true == $isDatabaseAccessible) {
-                    $databaseUrl = sprintf("mysql://%s:%s@%s:%s/%s", $db_user, $db_password, $db_host, $db_port, $db_name);
+                    $databaseUrl = sprintf('mysql://%s:%s@%s:%s/%s', $db_user, $db_password, $db_host, $db_port, $db_name);
 
                     $output->writeln("\n  [-] Switching to database <info>$db_name</info>");
 
                     try {
-                        $process = new Process(["php", "bin/console", "uvdesk_wizard:env:update", "DATABASE_URL", $databaseUrl]);
+                        $process = new Process(['php', 'bin/console', 'uvdesk_wizard:env:update', 'DATABASE_URL', $databaseUrl]);
                         $process->setWorkingDirectory($this->projectDirectory);
                         $process->mustRun();
 
                         $output->writeln("  <info>[v]</info> Successfully switched to database <info>$db_name</info>\n");
                     } catch (\Exception $e) {
                         $output->writeln([
-                            "<fg=red;>  [x]</> Failed to update .env with updated database credentials.</>",
-                            "\n  Exiting evaluation process.\n"
+                            '<fg=red;>  [x]</> Failed to update .env with updated database credentials.</>',
+                            "\n  Exiting evaluation process.\n",
                         ]);
 
                         return 1;
@@ -155,25 +155,25 @@ class ConfigureHelpdesk extends Command
         } else {
             $output->writeln("  <info>[v]</info> Successfully established a connection with database <info>$db_name</info>\n");
         }
-        
+
         // Check 2: Ensure entities have been loaded
         $output->writeln("  [-] Comparing the <info>$db_name</info> database schema with the current mapping metadata.");
-        
+
         try {
             // Get the current database migration version
             $currentMigrationVersion = $this->getLatestMigrationVersion(new BufferedOutput());
 
             // Version migrations
-            $process = new Process(["php", "bin/console", "doctrine:migrations:version", "--add", "--all", "--no-interaction"]);
+            $process = new Process(['php', 'bin/console', 'doctrine:migrations:version', '--add', '--all', '--no-interaction']);
             $process->setWorkingDirectory($this->projectDirectory);
             $process->run();
 
             // Compare the current database migration version against database and create a new migration version accordingly.
-            $process = new Process(["php", "bin/console", "doctrine:migrations:diff", "--quiet"]);
+            $process = new Process(['php', 'bin/console', 'doctrine:migrations:diff', '--quiet']);
             $process->setWorkingDirectory($this->projectDirectory);
             $process->mustRun();
 
-            $process = new Process(["php", "bin/console", "doctrine:migrations:status", "--quiet"]);
+            $process = new Process(['php', 'bin/console', 'doctrine:migrations:status', '--quiet']);
             $process->setWorkingDirectory($this->projectDirectory);
             $process->run();
 
@@ -181,25 +181,25 @@ class ConfigureHelpdesk extends Command
             $latestMigrationVersion = $this->getLatestMigrationVersion(new BufferedOutput());
 
             if ($currentMigrationVersion != $latestMigrationVersion) {
-                $output->writeln("  <comment>[!]</comment> The current database schema is not up-to-date with the current mapping metadata.");
+                $output->writeln('  <comment>[!]</comment> The current database schema is not up-to-date with the current mapping metadata.');
                 $interactiveQuestion = new Question("\n      <comment>Update your database schema to the current mapping metadata? [Y/N]</comment> ", 'Y');
-    
+
                 if ('Y' === strtoupper($this->questionHelper->ask($input, $output, $interactiveQuestion))) {
                     $output->writeln([
-                        "",
+                        '',
                         "      Please wait while your database is being migrated from version <comment>$currentMigrationVersion</comment> to <info>$latestMigrationVersion</info>.",
                         "      This could take up to a few minutes.\n",
                     ]);
 
                     try {
                         // Migrate database to latest schematic version
-                        $process = new Process(["php", "bin/console", "doctrine:migrations:migrate", "--no-interaction", "--quiet"]);
+                        $process = new Process(['php', 'bin/console', 'doctrine:migrations:migrate', '--no-interaction', '--quiet']);
                         $process->setTimeout(900);
                         $process->setWorkingDirectory($this->projectDirectory);
                         $process->mustRun();
-    
+
                         // Load database fixtures to populate initial dataset
-                        $process = new Process(["php", "bin/console", "doctrine:fixtures:load", "--append"]);
+                        $process = new Process(['php', 'bin/console', 'doctrine:fixtures:load', '--append']);
                         $process->setTimeout(120);
                         $process->setWorkingDirectory($this->projectDirectory);
                         $process->mustRun();
@@ -208,23 +208,23 @@ class ConfigureHelpdesk extends Command
                     } catch (\Exception $e) {
                         $output->writeln([
                             "\n  <fg=red;>[x]</> Unable to successfully migrate to latest database schematic version.",
-                            "\n  Exiting evaluation process.\n"
+                            "\n  Exiting evaluation process.\n",
                         ]);
-        
+
                         return 1;
                     }
                 } else {
                     $output->writeln([
                         "\n  <fg=red;>[x]</> There are entities that have not been updated to the <info>$databaseName</info> database yet.",
-                        "\n  Exiting evaluation process.\n"
+                        "\n  Exiting evaluation process.\n",
                     ]);
-    
+
                     return 1;
                 }
             } else {
                 $output->writeln([
                     "\n  <fg=red;>[x]</> Unable to correctly determine database schema version.",
-                    "\n  Exiting evaluation process.\n"
+                    "\n  Exiting evaluation process.\n",
                 ]);
 
                 return 1;
@@ -235,54 +235,54 @@ class ConfigureHelpdesk extends Command
         }
 
         // Check 3: Check if super admin account exists
-        $output->writeln("  [-] Checking if an active super admin account exists");
+        $output->writeln('  [-] Checking if an active super admin account exists');
 
         $database = new \PDO("mysql:host=$db_host:$db_port;dbname=$db_name", $db_user, $db_password);
 
         $supportRoleQuery = $database->query("SELECT * FROM uv_support_role WHERE code = 'ROLE_SUPER_ADMIN'");
         $supportRole = $supportRoleQuery->fetch(\PDO::FETCH_ASSOC);
 
-        $userInstanceQuery = $database->query("SELECT * FROM uv_user_instance WHERE supportRole_id = " . $supportRole['id']);
+        $userInstanceQuery = $database->query('SELECT * FROM uv_user_instance WHERE supportRole_id = '.$supportRole['id']);
         $userInstance = $userInstanceQuery->fetch(\PDO::FETCH_ASSOC);
-        
+
         if (empty($userInstance)) {
-            $output->writeln("  <comment>[!]</comment> No active user account found with super admin privileges.");
+            $output->writeln('  <comment>[!]</comment> No active user account found with super admin privileges.');
             $interactiveQuestion = new Question("\n      <comment>Create a new user account with super admin privileges? [Y/N]</comment> ", 'Y');
 
             if ('Y' === strtoupper($this->questionHelper->ask($input, $output, $interactiveQuestion))) {
                 $output->write(["\033[1A", "\033[K", "\033[1A", "\033[K"]);
                 $output->writeln("\n      <comment>Please enter the following details:</comment>\n");
-    
+
                 $warningFlag = false;
 
                 do {
-                    $u_email = $this->askInteractiveQuestion("<info>Email</info>: ", null, 6, false, false, "Please enter a valid email address");
+                    $u_email = $this->askInteractiveQuestion('<info>Email</info>: ', null, 6, false, false, 'Please enter a valid email address');
                     $u_email = filter_var($u_email, FILTER_SANITIZE_EMAIL);
 
                     if ($warningFlag) {
                         $output->write([self::MCA, self::CLL]);
                     }
-    
+
                     if (false == filter_var($u_email, FILTER_VALIDATE_EMAIL)) {
                         $output->writeln("      <comment>Warning</comment>: <comment>$u_email</comment> is not a valid email address");
                         $warningFlag = true;
                     }
                 } while (false == filter_var($u_email, FILTER_VALIDATE_EMAIL));
 
-                $u_name = $this->askInteractiveQuestion("<info>Name</info>: ", null, 6, false, false, "Please enter your name");
+                $u_name = $this->askInteractiveQuestion('<info>Name</info>: ', null, 6, false, false, 'Please enter your name');
 
                 $warningFlag = false;
 
                 do {
-                    $u_password = $this->askInteractiveQuestion("<info>Password</info>: ", null, 6, false, true, "Please enter your password");
-                    $u_cpassword = $this->askInteractiveQuestion("<info>Confirm Password</info>: ", null, 6, false, true, "Please enter your password");
+                    $u_password = $this->askInteractiveQuestion('<info>Password</info>: ', null, 6, false, true, 'Please enter your password');
+                    $u_cpassword = $this->askInteractiveQuestion('<info>Confirm Password</info>: ', null, 6, false, true, 'Please enter your password');
 
                     if ($warningFlag) {
                         $output->write([self::MCA, self::CLL]);
                     }
-    
+
                     if ($u_password != $u_cpassword) {
-                        $output->writeln("      <comment>Warning</comment>: Passwords do not match");
+                        $output->writeln('      <comment>Warning</comment>: Passwords do not match');
                         $warningFlag = true;
                     }
                 } while ($u_password != $u_cpassword);
@@ -290,8 +290,8 @@ class ConfigureHelpdesk extends Command
                 $output->write([self::MCA, self::CLL, self::MCA, self::CLL, self::MCA, self::CLL]);
 
                 try {
-                    $process = new Process(["php", "bin/console", "uvdesk_wizard:defaults:create-user", "ROLE_SUPER_ADMIN",  trim($u_name), $u_email, $u_password, '--no-interaction']);
-        
+                    $process = new Process(['php', 'bin/console', 'uvdesk_wizard:defaults:create-user', 'ROLE_SUPER_ADMIN',  trim($u_name), $u_email, $u_password, '--no-interaction']);
+
                     $process->setWorkingDirectory($this->projectDirectory);
                     $process->mustRun();
 
@@ -300,7 +300,7 @@ class ConfigureHelpdesk extends Command
                     // Do nothing ...
                     $output->writeln([
                         "  <fg=red;>[x]</> An unexpected error occurred while creating the user account.\n",
-                        "\n  Exiting evaluation process.\n"
+                        "\n  Exiting evaluation process.\n",
                     ]);
 
                     return 1;
@@ -325,8 +325,8 @@ class ConfigureHelpdesk extends Command
      * @param string $name
      * @param string $user
      * @param string $password
-     * 
-     * @return boolean
+     *
+     * @return bool
      */
     private function refreshDatabaseConnection($host, $port, $name, $user, $password)
     {
@@ -337,20 +337,19 @@ class ConfigureHelpdesk extends Command
 
         $entityManager = EntityManager::create([
             'driver' => 'pdo_mysql',
-            "host" => $host,
-            "port" => $port,
+            'host' => $host,
+            'port' => $port,
             'user' => $user,
             'password' => $password,
         ], Setup::createAnnotationMetadataConfiguration(['src/Entity'], false));
-        
+
         $databaseConnection = $entityManager->getConnection();
 
         if (false == $databaseConnection->isConnected()) {
             try {
                 $databaseConnection->connect();
                 $response['isServerAccessible'] = true;
-
-            } catch (\Doctrine\DBAL\DBALException $e) {
+            } catch (DBALException $e) {
                 return false;
             }
         }
@@ -370,25 +369,25 @@ class ConfigureHelpdesk extends Command
      * @param string $name
      * @param string $user
      * @param string $password
-     * 
-     * @return boolean
+     *
+     * @return bool
      */
     private function createDatabase($host, $port, $name, $user, $password)
     {
         $entityManager = EntityManager::create([
             'driver' => 'pdo_mysql',
-            "host" => $host,
-            "port" => $port,
+            'host' => $host,
+            'port' => $port,
             'user' => $user,
             'password' => $password,
         ], Setup::createAnnotationMetadataConfiguration(['src/Entity'], false));
-        
+
         $databaseConnection = $entityManager->getConnection();
 
         if (false == $databaseConnection->isConnected()) {
             try {
                 $databaseConnection->connect();
-            } catch (\Doctrine\DBAL\DBALException $e) {
+            } catch (DBALException $e) {
                 return false;
             }
         }
@@ -407,34 +406,32 @@ class ConfigureHelpdesk extends Command
 
     /**
      * Get updated database credentials as given in .env located in project root.
-     * 
+     *
      * @return array
-    */
+     */
     private function getUpdatedDatabaseCredentials()
     {
         $env = (new Dotenv())
-            ->parse(file_get_contents($this->container->getParameter('kernel.project_dir') . '/.env'));
-        
-        $it = explode('@', substr($env['DATABASE_URL'], strpos($env['DATABASE_URL'], "://") + 3));
-        
-        $name = substr($it[1], strpos($it[1], "/") + 1);
+            ->parse(file_get_contents($this->container->getParameter('kernel.project_dir').'/.env'));
+
+        $it = explode('@', substr($env['DATABASE_URL'], strpos($env['DATABASE_URL'], '://') + 3));
+
+        $name = substr($it[1], strpos($it[1], '/') + 1);
         list($user, $password) = explode(':', $it[0]);
-        list($host, $port) = explode(':', substr($it[1], 0, strpos($it[1], "/")));
+        list($host, $port) = explode(':', substr($it[1], 0, strpos($it[1], '/')));
 
         return [$host, $port, $name, $user, $password];
     }
 
     /**
      * Retrieve the latest migration version.
-     * 
-     * @param OutputInterface   $bufferedOutput
-     * 
+     *
      * @return string
-    */
+     */
     private function getLatestMigrationVersion(OutputInterface $bufferedOutput)
     {
         try {
-            $process = new Process(["php", "bin/console", "doctrine:migrations:latest"]);
+            $process = new Process(['php', 'bin/console', 'doctrine:migrations:latest']);
             $process->setWorkingDirectory($this->projectDirectory);
             $process->mustRun();
 
@@ -447,24 +444,21 @@ class ConfigureHelpdesk extends Command
     }
 
     /**
-     * Generic prompt to ask for an input from user
+     * Generic prompt to ask for an input from user.
      *
      * @param string $question
      * @param string $default
-     * @param integer $indentLength
-     * @param boolean $nullable
-     * @param boolean $secure
      * @param string $warningMessage
-     * 
+     *
      * @return string
      */
-    private function askInteractiveQuestion($question, $default, int $indentLength = 6, bool $nullable = true, bool $secure = false, $warningMessage = "")
+    private function askInteractiveQuestion($question, $default, int $indentLength = 6, bool $nullable = true, bool $secure = false, $warningMessage = '')
     {
         $flag = false;
         $indent = str_repeat(' ', $indentLength);
 
         do {
-            $prompt = new Question($indent . $question, $default);
+            $prompt = new Question($indent.$question, $default);
 
             // Hide user input
             if (true == $secure) {
@@ -478,9 +472,9 @@ class ConfigureHelpdesk extends Command
             if (empty($input) && false == $nullable && empty($default)) {
                 if (!empty($default)) {
                     $input = $default;
-                } else if (false == $nullable) {
+                } elseif (false == $nullable) {
                     $flag = true;
-                    $this->consoleOutput->writeln("$indent<comment>Warning</comment>: " . ($warningMessage ?? "Please enter a valid value"));
+                    $this->consoleOutput->writeln("$indent<comment>Warning</comment>: ".($warningMessage ?? 'Please enter a valid value'));
                 }
             }
         } while (empty($input) && false == $nullable);

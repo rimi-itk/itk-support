@@ -8,7 +8,7 @@ class RoutingResource implements RoutingResourceInterface
 {
     public static function getResourcePath()
     {
-        return __DIR__ . "/../Resources/config/routes.yaml";
+        return __DIR__.'/../Resources/config/routes.yaml';
     }
 
     public static function getResourceType()

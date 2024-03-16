@@ -49,7 +49,7 @@
                 <path id="error-icon" class="cls-1" fill="#ff5656" fill-rule="evenodd" d="M764.5,352A10.5,10.5,0,1,1,754,362.5,10.5,10.5,0,0,1,764.5,352Zm-0.006,12.988a1.506,1.506,0,1,1-1.5,1.506A1.5,1.5,0,0,1,764.494,364.988ZM763,356h3v8h-3v-8Z" transform="translate(-754 -352)"/>
             </svg>
         </script>
-        
+
         <script id="installationWizard-DefaultHeaderTemplate" type="text/template">
             <div class="installation-wizard-steps-overview-container">
                 <div class="uvdesk-logo">
@@ -66,20 +66,20 @@
                             <div class="outer-circle"></div>
                             <div class="inner-circle"></div>
                         </div>
-                        
+
                         <p>Welcome</p>
                     </li>
 
                     <li>
                         <div class="divider"></div>
                     </li>
-                    
+
                     <li class="check-requirements">
                         <div class="node">
                             <div class="outer-circle"></div>
                             <div class="inner-circle"></div>
                         </div>
-                        
+
                         <p>System Requirements</p>
                     </li>
 
@@ -92,20 +92,20 @@
                             <div class="outer-circle"></div>
                             <div class="inner-circle"></div>
                         </div>
-                        
+
                         <p>Database Configuration</p>
                     </li>
 
                     <li>
                         <div class="divider"></div>
                     </li>
-                    
+
                     <li class="create-admin">
                         <div class="node">
                             <div class="outer-circle"></div>
                             <div class="inner-circle"></div>
                         </div>
-                        
+
                         <p>Admin Details</p>
                     </li>
 
@@ -118,7 +118,7 @@
                             <div class="outer-circle"></div>
                             <div class="inner-circle"></div>
                         </div>
-                        
+
                         <p>Installation</p>
                     </li>
                 </ul>
@@ -128,7 +128,7 @@
         <script id="installationWizard-DefaultContentTemplate" type="text/template">
             <div id="start-installation">
                 <h2>Welcome</h2>
-                
+
                 <p>Welcome to the helpdesk installation wizard</p>
                 <p>This wizard will help you to guide in setting up the Uvdesk Community Edition on your system.</p>
                 <p style="padding: 5px; border: 1px solid black; margin-top: 15pt; font-style: italic;"><b style="font-weight:bold">Note:</b> Please check prerequisite as per your OS before starting installion process <a style="text-decoration:none" href="https://www.uvdesk.com/en/blog/open-source-helpdesk-installation-on-ubuntu-uvdesk/" target="_blank">Ubuntu</a>, <a style="text-decoration:none" href="https://www.uvdesk.com/en/blog/open-source-helpdesk-installation-on-wamp/" target="_blank">Windows</a>, <a style="text-decoration:none"  href="https://www.uvdesk.com/en/blog/open-source-helpdesk-installation-centos-uvdesk/" target="_blank">Centos</a> and <a style="text-decoration:none"  href="https://www.uvdesk.com/en/blog/installing-open-source-helpdesk-on-your-mac-with-mamp/" target="_blank">Mac.</a>
@@ -142,7 +142,7 @@
 
         <script id="installationWizard-SetupTemplate" type="text/template">
             <div id="wizardSetup"></div>
-            
+
             <ul id="wizardSetupNavigation" class="button-groups">
                 <li><button id="wizardCTA-IterateBackward" class="wizard-button solid button-theme-uvdesk"><span>Back<span></button></li>
                 <li><button id="wizardCTA-IterateInstallation" class="wizard-button solid button-theme-uvdesk"><span>Proceed<span></button></li>
@@ -196,7 +196,7 @@
                 </span>
             </div>
         </script>
-        
+
         <script id="installationWizard-SystemRequirementsTemplate-PHPPermission" type="text/template">
             <div class="permission-info-container">
                 <span class="wizard-svg-icon-criteria-checklist wizard-svg-icon-permissionEnvfile-criteria-checklist"></span><label class="permission-criteria-label"></label>
@@ -212,7 +212,7 @@
             <div id="wizard-systemRequirements">
                 <h2>System Requirements</h2>
                 <p>The wizard will check whether your system meets the minimum requirements to successfully run the application.</p>
-                
+
                 <ul class="criteria-checklist">
                     <li id="systemCriteria-PHPVersion" class="fetching-details"></li>
                     <li id="systemCriteria-PHPExtensions" class="fetching-details"></li>
@@ -248,7 +248,6 @@
                 <h2>Database Configuration</h2>
                 <p>The wizard will check your MySQL database connection for any issues and configure it with your application.</p>
 
-
                 <form name="wizardForm-ConfigureDatabase" class="database-integration wizard-form" method="post">
                     <div class="form-field">
                         <label class="form-label">Server<span class="uv-mandatory">*</span></label>
@@ -273,7 +272,7 @@
                             <p class="wizard-form-info">Port number of the database (on which port database is hosted).</p>
                         </div>
                     </div>
-                    
+
                     <div class="form-field">
                         <label class="form-label">Username<span class="uv-mandatory">*</span></label>
                         <div class="form-content">
@@ -281,7 +280,7 @@
                             <p class="wizard-form-info">Username to use when connecting to the database.</p>
                         </div>
                     </div>
-                    
+
                     <div class="form-field">
                         <label class="form-label">Password<span class="uv-mandatory">*</span></label>
                         <div class="form-content">
@@ -316,8 +315,6 @@
                 <h2>Create Super Admin Account</h2>
                 <p>The wizard will create a default super admin account that can be used to access your application's backend.</p>
 
-                
-
                 <form name="wizardForm-ConfigureAccount" method="post" class="ConfigureAccount wizard-form">
                     <div class="form-field">
                         <label class="form-label">Name<span class="uv-mandatory">*</span></label>
@@ -326,7 +323,7 @@
                             <p class="wizard-form-info">Name of the user to be created.</p>
                         </div>
                     </div>
-                    
+
                     <div class="form-field">
                         <label class="form-label">Email<span class="uv-mandatory">*</span></label>
                         <div class="form-content">
@@ -334,7 +331,7 @@
                             <p class="wizard-form-info">Email of the user to be created.</p>
                         </div>
                     </div>
-                    
+
                     <div class="form-field">
                         <label class="form-label">Password<span class="uv-mandatory">*</span></label>
                         <div class="form-content">
@@ -376,16 +373,16 @@
 
         <script id="installationWizard-InstallationCompleteTemplate" type="text/template">
             <div id="wizardSetupComplete">
-                
+
                 <h2>Congratulations!</h2>
                 <p>Your Uvdesk helpdesk has been installed successfully.</p>
-				<div class="line-break"></div>
+                <div class="line-break"></div>
                 <p style="color: #6F6F6F;">Visit your admin and support panel by clicking on respective buttons.</p>
                 <h5 style="padding: 15px 0px 15px 0px;">Admin</h5>
-    			<a class ="button_css" href="<%- prefixCollecton.member %>" target="_blank" id="member_panel_url" target="_blank" id="member_panel_url" style="">Admin Panel</a>
-    			<h5 style="padding: 35px 0px 15px 0px">Frontend</h5>
-    			<a class ="button_css" href="<%- prefixCollecton.knowledgebase %>" target="_blank" id="customer_panel_url" target="_blank" id="customer_panel_url">Knowledgebase</a>
-               
+                <a class ="button_css" href="<%- prefixCollecton.member %>" target="_blank" id="member_panel_url" target="_blank" id="member_panel_url" style="">Admin Panel</a>
+                <h5 style="padding: 35px 0px 15px 0px">Frontend</h5>
+                <a class ="button_css" href="<%- prefixCollecton.knowledgebase %>" target="_blank" id="customer_panel_url" target="_blank" id="customer_panel_url">Knowledgebase</a>
+
             </div>
         </script>
 

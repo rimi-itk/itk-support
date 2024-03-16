@@ -12,15 +12,15 @@ use Doctrine\Migrations\AbstractMigration;
  */
 final class Version20240308123921 extends AbstractMigration
 {
-    public function getDescription() : string
+    public function getDescription(): string
     {
         return '';
     }
 
-    public function up(Schema $schema) : void
+    public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
+        $this->abortIf('mysql' !== $this->connection->getDatabasePlatform()->getName(), 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('CREATE TABLE agent_activity (id INT AUTO_INCREMENT NOT NULL, agent_id INT NOT NULL, ticket_id INT NOT NULL, agent_name VARCHAR(255) DEFAULT NULL, customer_name VARCHAR(255) DEFAULT NULL, thread_type VARCHAR(255) DEFAULT NULL, created_at DATETIME NOT NULL, INDEX IDX_9AA510CE3414710B (agent_id), INDEX IDX_9AA510CE700047D2 (ticket_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE announcement (id INT AUTO_INCREMENT NOT NULL, group_id INT NOT NULL, title VARCHAR(255) NOT NULL, promo_text VARCHAR(255) NOT NULL, promo_tag VARCHAR(255) NOT NULL, tag_color VARCHAR(255) DEFAULT NULL, link_text VARCHAR(255) NOT NULL, link_url VARCHAR(255) NOT NULL, is_active TINYINT(1) NOT NULL, created_at DATETIME DEFAULT NULL, updated_at DATETIME DEFAULT NULL, INDEX IDX_4DB9D91CFE54D947 (group_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
@@ -129,10 +129,10 @@ final class Version20240308123921 extends AbstractMigration
         $this->addSql('ALTER TABLE uv_workflow_events ADD CONSTRAINT FK_6AEB02A92C7C2CBA FOREIGN KEY (workflow_id) REFERENCES uv_workflow (id) ON DELETE CASCADE');
     }
 
-    public function down(Schema $schema) : void
+    public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
+        $this->abortIf('mysql' !== $this->connection->getDatabasePlatform()->getName(), 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('ALTER TABLE uv_article_feedback DROP FOREIGN KEY FK_BCB7F9147294869C');
         $this->addSql('ALTER TABLE uv_article_view_log DROP FOREIGN KEY FK_8F76FF117294869C');

@@ -3,18 +3,16 @@
 namespace App\Console\Wizard;
 
 use Doctrine\DBAL\DBALException;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Output\NullOutput;
-use Symfony\Component\Console\Question\Question;
-use Doctrine\DBAL\Migrations\MigrationException;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\BufferedOutput;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Console\Input\ArrayInput as ConsoleOptions;
 use Doctrine\Migrations\Exception\UnknownMigrationVersion;
 use Doctrine\Migrations\Generator\Exception\NoChangesDetected;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\ArrayInput as ConsoleOptions;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\BufferedOutput;
+use Symfony\Component\Console\Output\NullOutput;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class MigrateDatabase extends Command
 {
@@ -58,13 +56,13 @@ class MigrateDatabase extends Command
 
         $this->versionMigrations($output);
 
-        // Compare the current database migration version against database 
+        // Compare the current database migration version against database
         // and create a new migration version accordingly.
         try {
             $latestMigrationVersion = $this
                 ->compareMigrations($output)
                 ->getLatestMigrationVersion(new BufferedOutput());
-            
+
             if (('0' != $currentMigrationVersion && $currentMigrationVersion != $latestMigrationVersion) || ($currentMigrationVersion != $latestMigrationVersion)) {
                 $this->migrateDatabaseToLatestVersion(new NullOutput());
             }
@@ -82,7 +80,7 @@ class MigrateDatabase extends Command
             'command' => 'migrations:version',
             '--add' => true,
             '--all' => true,
-            '--quiet' => true
+            '--quiet' => true,
         ]))->setInteractive(false);
 
         // Execute command
@@ -96,15 +94,15 @@ class MigrateDatabase extends Command
         $compareMigrationsCommand = $this->getApplication()->find('doctrine:migrations:diff');
         $compareMigrationsCommandOptions = new ConsoleOptions([
             'command' => 'migrations:diff',
-            '--quiet' => true
+            '--quiet' => true,
         ]);
-        
+
         $viewMigrationStatusCommand = $this->getApplication()->find('doctrine:migrations:status');
         $viewMigrationStatusCommandOptions = new ConsoleOptions([
             'command' => 'migrations:status',
-            '--quiet' => true
+            '--quiet' => true,
         ]);
-            
+
         // Execute command
         $compareMigrationsCommand->run($compareMigrationsCommandOptions, new NullOutput());
         $viewMigrationStatusCommand->run($viewMigrationStatusCommandOptions, new NullOutput());
@@ -116,7 +114,7 @@ class MigrateDatabase extends Command
     {
         $command = $this->getApplication()->find('doctrine:migrations:latest');
         $commandOptions = new ConsoleOptions([
-            'command' => 'migrations:latest'
+            'command' => 'migrations:latest',
         ]);
 
         // To avoid issues through same instance
@@ -135,7 +133,7 @@ class MigrateDatabase extends Command
         ($commandOptions = new ConsoleOptions([
             'command' => 'migrations:migrate',
         ]))->setInteractive(false);
-        
+
         // Execute Command
         $command->run($commandOptions, $consoleOutput);
 
@@ -147,7 +145,7 @@ class MigrateDatabase extends Command
         $databaseConnection = $this->entityManager->getConnection();
 
         if (false === $databaseConnection->isConnected()) {
-            try {    
+            try {
                 $databaseConnection->connect();
             } catch (DBALException $e) {
                 return false;

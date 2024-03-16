@@ -29,7 +29,6 @@ Sign in as `admin@example.com` with password `password`.
 `user@example.com`
 `password!`
 
-
 ### API
 
 <https://github.com/uvdesk/api-bundle/wiki/Ticket-Related-APIs>
@@ -48,13 +47,12 @@ curl "http://itk-support.local.itkdev.dk/api/v1/ticket" \
 }
 JSON
 ```
-### Email
 
+### Email
 
 ``` shell
 docker compose exec phpfpm php bin/console swiftmailer:email:send --from=admin@example.com --to=user@example.com --subject=Test --body='Message body' --ansi --mailer=dev
 ```
-
 
 ```shell
 mysqldump --host=$(docker compose port mariadb 3306 | cut -d: -f1) --port=$(docker compose port mariadb 3306 | cut -d: -f2) --user=db --password=db db > .docker/dumps/uvdesk/db.sql
@@ -100,4 +98,29 @@ curl "http://$(docker compose port leantime 80)/api/jsonrpc" \
  "params": {}
 }
 JSON
+```
+
+## Coding standards
+
+```shell
+docker compose exec phpfpm composer coding-standards-check
+```
+
+```shell
+docker compose exec phpfpm composer coding-standards-apply
+```
+
+```shell
+docker compose run --rm node yarn install
+docker compose run --rm node yarn coding-standards-check
+```
+
+```shell
+docker compose run --rm node yarn coding-standards-apply
+```
+
+## Code analysis
+
+```shell
+docker compose exec phpfpm composer code-analysis
 ```
