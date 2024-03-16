@@ -7,12 +7,17 @@ parameters:
         - src/
         - tests/
 
+    excludePaths:
+        # UVdesk files
+        - src/Console/
+        - src/Controller/BaseController.php
+        - src/Controller/ConfigureHelpdesk.php
+        - src/EventListener/ExceptionSubscriber.php
+        - src/Routing/RoutingResource.php
+
     ignoreErrors:
         - '#Method .+ has parameter .+ with no value type specified in iterable type array#'
         - '#Method .+ return type has no value type specified in iterable type array.#'
-        # @TODO Clean this up
-        - '#Call to an undefined method Spatie\\IcalendarGenerator\\Components\\Component::fullDay\(\).#'
-        - '#Call to an undefined method Spatie\\IcalendarGenerator\\Components\\Component::repeatOn\(\).#'
 
     checkGenericClassInNonGenericObjectType: false
 
