@@ -1,6 +1,6 @@
--- MariaDB dump 10.19-11.3.2-MariaDB, for osx10.19 (x86_64)
+-- MariaDB dump 10.19  Distrib 10.11.6-MariaDB, for Linux (x86_64)
 --
--- Host: 0.0.0.0    Database: db
+-- Host: leantime-db    Database: db
 -- ------------------------------------------------------
 -- Server version	10.11.7-MariaDB-1:10.11.7+maria~ubu2204
 
@@ -130,8 +130,7 @@ CREATE TABLE `zp_canvas` (
 
 LOCK TABLES `zp_canvas` WRITE;
 /*!40000 ALTER TABLE `zp_canvas` DISABLE KEYS */;
-INSERT INTO `zp_canvas` VALUES
-(1,'Lean Canvas',1,'2015-11-13 13:03:46',3,'leancanvas',NULL);
+INSERT INTO `zp_canvas` (`id`, `title`, `author`, `created`, `projectId`, `type`, `description`) VALUES (1,'Lean Canvas',1,'2015-11-13 13:03:46',3,'leancanvas',NULL);
 /*!40000 ALTER TABLE `zp_canvas` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -223,8 +222,7 @@ CREATE TABLE `zp_clients` (
 
 LOCK TABLES `zp_clients` WRITE;
 /*!40000 ALTER TABLE `zp_clients` DISABLE KEYS */;
-INSERT INTO `zp_clients` VALUES
-(1,'ITK','',0,'','','','','',NULL,NULL,'');
+INSERT INTO `zp_clients` (`id`, `name`, `street`, `zip`, `city`, `state`, `country`, `phone`, `internet`, `published`, `age`, `email`) VALUES (1,'ITK development','',0,'','','','','',NULL,NULL,'');
 /*!40000 ALTER TABLE `zp_clients` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -424,7 +422,7 @@ CREATE TABLE `zp_notifications` (
   KEY `userId` (`userId`),
   KEY `userId,datetime` (`userId`,`datetime` DESC),
   KEY `userId,read` (`userId`,`read` DESC)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -505,8 +503,7 @@ CREATE TABLE `zp_projects` (
 
 LOCK TABLES `zp_projects` WRITE;
 /*!40000 ALTER TABLE `zp_projects` DISABLE KEYS */;
-INSERT INTO `zp_projects` VALUES
-(3,'The first project',1,'<h3>What are you trying to accomplish?</h3><br /><h3>What does the world, your business or your customers journey look like when you\'re done?</h3><br /><h3>Why is this important?</h3>',0,'0',0,NULL,'default',NULL,NULL,NULL,NULL,NULL,NULL,'2024-02-29 21:15:17',NULL,NULL,NULL);
+INSERT INTO `zp_projects` (`id`, `name`, `clientId`, `details`, `state`, `hourBudget`, `dollarBudget`, `active`, `menuType`, `psettings`, `parent`, `type`, `start`, `end`, `created`, `modified`, `avatar`, `cover`, `sortIndex`) VALUES (3,'Support',1,'<h3>What are you trying to accomplish?</h3>\r\n<p>&nbsp;</p>\r\n<h3>What does the world, your business or your customers journey look like when you\'re done?</h3>\r\n<p>&nbsp;</p>\r\n<h3>Why is this important?</h3>',0,'0',0,NULL,'default','restricted',0,'project',NULL,NULL,NULL,'2024-03-16 04:05:08',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `zp_projects` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -636,7 +633,7 @@ CREATE TABLE `zp_relationuserproject` (
   PRIMARY KEY (`id`),
   KEY `zp_relationuserproject_projectId_index` (`projectId`),
   KEY `zp_relationuserproject_userId_index` (`userId`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -645,11 +642,11 @@ CREATE TABLE `zp_relationuserproject` (
 
 LOCK TABLES `zp_relationuserproject` WRITE;
 /*!40000 ALTER TABLE `zp_relationuserproject` DISABLE KEYS */;
-INSERT INTO `zp_relationuserproject` VALUES
-(6,1,3,NULL,NULL),
-(7,19,3,NULL,NULL),
-(8,18,3,NULL,NULL),
-(9,20,3,NULL,NULL);
+INSERT INTO `zp_relationuserproject` (`id`, `userId`, `projectId`, `wage`, `projectRole`) VALUES (6,1,3,NULL,NULL);
+INSERT INTO `zp_relationuserproject` (`id`, `userId`, `projectId`, `wage`, `projectRole`) VALUES (7,19,3,NULL,NULL);
+INSERT INTO `zp_relationuserproject` (`id`, `userId`, `projectId`, `wage`, `projectRole`) VALUES (8,18,3,NULL,NULL);
+INSERT INTO `zp_relationuserproject` (`id`, `userId`, `projectId`, `wage`, `projectRole`) VALUES (9,20,3,NULL,NULL);
+INSERT INTO `zp_relationuserproject` (`id`, `userId`, `projectId`, `wage`, `projectRole`) VALUES (10,2,3,NULL,'');
 /*!40000 ALTER TABLE `zp_relationuserproject` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -673,14 +670,16 @@ CREATE TABLE `zp_settings` (
 
 LOCK TABLES `zp_settings` WRITE;
 /*!40000 ALTER TABLE `zp_settings` DISABLE KEYS */;
-INSERT INTO `zp_settings` VALUES
-('companysettings.completedOnboarding','1'),
-('companysettings.telemetry.active','true'),
-('companysettings.telemetry.anonymousId','414d14bc-11a2-43de-a0f4-c5e6a28b0f48'),
-('companysettings.telemetry.lastUpdate','2024-02-29'),
-('db-version','3.0.2'),
-('usersettings.1.lastProject','3'),
-('usersettings.1.recentProjects','a:1:{i:0;i:3;}');
+INSERT INTO `zp_settings` (`key`, `value`) VALUES ('companysettings.completedOnboarding','1');
+INSERT INTO `zp_settings` (`key`, `value`) VALUES ('companysettings.telemetry.active','true');
+INSERT INTO `zp_settings` (`key`, `value`) VALUES ('companysettings.telemetry.anonymousId','7e430ed5-f075-447c-a4c7-2ed842abbfc7');
+INSERT INTO `zp_settings` (`key`, `value`) VALUES ('companysettings.telemetry.lastUpdate','2024-03-16');
+INSERT INTO `zp_settings` (`key`, `value`) VALUES ('db-version','3.0.2');
+INSERT INTO `zp_settings` (`key`, `value`) VALUES ('usersettings.1.lastMessageDate','2024-03-16 15:20:58');
+INSERT INTO `zp_settings` (`key`, `value`) VALUES ('usersettings.1.lastProject','3');
+INSERT INTO `zp_settings` (`key`, `value`) VALUES ('usersettings.1.recentProjects','a:1:{i:0;i:3;}');
+INSERT INTO `zp_settings` (`key`, `value`) VALUES ('usersettings.2.lastProject','3');
+INSERT INTO `zp_settings` (`key`, `value`) VALUES ('usersettings.2.recentProjects','a:1:{i:0;i:3;}');
 /*!40000 ALTER TABLE `zp_settings` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -757,8 +756,7 @@ CREATE TABLE `zp_stats` (
 
 LOCK TABLES `zp_stats` WRITE;
 /*!40000 ALTER TABLE `zp_stats` DISABLE KEYS */;
-INSERT INTO `zp_stats` VALUES
-(-1,3,'2024-02-28 00:00:00',1,1,0,0,0,0,NULL,0,0,0,0,0,0,0,0,0,0,1,'9',NULL,NULL,0,NULL,NULL,0,1);
+INSERT INTO `zp_stats` (`sprintId`, `projectId`, `date`, `sum_todos`, `sum_open_todos`, `sum_progres_todos`, `sum_closed_todos`, `sum_planned_hours`, `sum_estremaining_hours`, `sum_logged_hours`, `sum_points`, `sum_points_done`, `sum_points_progress`, `sum_points_open`, `sum_todos_xs`, `sum_todos_s`, `sum_todos_m`, `sum_todos_l`, `sum_todos_xl`, `sum_todos_xxl`, `sum_todos_none`, `tickets`, `daily_avg_hours_booked_todo`, `daily_avg_hours_booked_point`, `daily_avg_hours_planned_todo`, `daily_avg_hours_planned_point`, `daily_avg_hours_remaining_point`, `daily_avg_hours_remaining_todo`, `sum_teammembers`) VALUES (-1,3,'2024-03-15 00:00:00',1,1,0,0,0,0,NULL,0,0,0,0,0,0,0,0,0,0,1,'9',NULL,NULL,0,NULL,NULL,0,1);
 /*!40000 ALTER TABLE `zp_stats` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -777,7 +775,7 @@ CREATE TABLE `zp_tickethistory` (
   `changeValue` varchar(150) DEFAULT NULL,
   `dateModified` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -836,7 +834,7 @@ CREATE TABLE `zp_tickets` (
   KEY `ProjectUserId` (`projectId`,`userId`),
   KEY `StatusSprint` (`status`,`sprint`),
   KEY `Sorting` (`sortindex`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -845,8 +843,6 @@ CREATE TABLE `zp_tickets` (
 
 LOCK TABLES `zp_tickets` WRITE;
 /*!40000 ALTER TABLE `zp_tickets` DISABLE KEYS */;
-INSERT INTO `zp_tickets` VALUES
-(9,3,'Getting Started with Leantime','<h2>Essentials</h2>\n                             <ul class=\"tox-checklist\" style=\"list-style-type: none;\">\n                             <li>Explore your <a href=\"dashboard/home\" target=\"_blank\" rel=\"noopener\">personal dashboard&nbsp;</a></li>\n                             <li>Create your first To-do under \"My Todos\"</li>\n                             <li>Drag and Drop your To-Do to the Calendar</li>\n                             </ul>\n                             <p>&nbsp;</p>\n                             <h2>Your first Project</h2>\n                             <ul class=\"tox-checklist\" style=\"list-style-type: none;\">\n                             <li>Go to your \"<a href=\"projects/showMy\" target=\"_blank\" rel=\"noopener\">Project Hub</a>\" and open a project</li>\n                             <li>Check the Project Checklist and learn what is needed to run a project</li>\n                             <li>Head to \"<a href=\"strategy/showBoards\" target=\"_blank\" rel=\"noopener\">Blueprints</a>\" and create a project value canvas</li>\n                             <li>Next create a <a href=\"goalcanvas/dashboard\" target=\"_blank\" rel=\"noopener\">Goal</a> for your project</li>\n                             <li>Now create a&nbsp;<a href=\"tickets/roadmap\" target=\"_blank\" rel=\"noopener\"> milestone </a>&nbsp;representing a large part of your project</li>\n                             <li>Create <a href=\"tickets/showKanban\" target=\"_blank\" rel=\"noopener\">to-dos</a> and assign them to milestones</li>\n                             </ul>\n                             <p>&nbsp;</p>\n                             <h2>Working with your Team</h2>\n                             <ul class=\"tox-checklist\" style=\"list-style-type: none;\">\n                             <li>Go to your <a href=\"dashboard/show\" target=\"_blank\" rel=\"noopener\">project dashboard</a> and invite a team member</li>\n                             <li>Open a To-Do, create a new comment and mention a team member using the \"@\" sign</li>\n                             </ul>\n                             ','','2024-02-29 00:00:00','2024-02-29 00:00:00','2',3,1,NULL,NULL,NULL,NULL,'',NULL,NULL,'1969-12-31 00:00:00','1969-12-31 00:00:00','1',0,0,'Story',0,0,0,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `zp_tickets` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -928,7 +924,7 @@ CREATE TABLE `zp_user` (
   `modified` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -937,8 +933,8 @@ CREATE TABLE `zp_user` (
 
 LOCK TABLES `zp_user` WRITE;
 /*!40000 ALTER TABLE `zp_user` DISABLE KEYS */;
-INSERT INTO `zp_user` VALUES
-(1,'admin@example.com','$2y$10$5s2eAuygxmD5oQcold0fTuVPjurcmIA1iRJKhHldbckE.Yt5xFbaK','Admin','Jensen','','','2024-02-29 20:25:25','a',NULL,'50','','1709238325',0,0,NULL,0,1,NULL,NULL,NULL,NULL,'0000-00-00 00:00:00',NULL,0,NULL,'2024-02-29 20:14:48',NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `zp_user` (`id`, `username`, `password`, `firstname`, `lastname`, `phone`, `profileId`, `lastlogin`, `status`, `expires`, `role`, `session`, `sessiontime`, `wage`, `hours`, `description`, `clientId`, `notifications`, `pwReset`, `pwResetExpiration`, `pwResetCount`, `forcePwReset`, `lastpwd_change`, `settings`, `twoFAEnabled`, `twoFASecret`, `createdOn`, `source`, `jobTitle`, `jobLevel`, `department`, `modified`) VALUES (1,'admin@example.com','$2y$10$1/bygAzY8n873wSfRPA47.2J4wUzP3h1n2DQwUVe6lqKt1KvTwCka','Admin','Jensen','','','2024-03-16 21:56:49','a',NULL,'50','dad35c2ee1a6c80f07cb229923996abbfd3409ae-d8a6a963c127d27ad57ab4ee07a5d09efbc186cf','1710626209',0,0,NULL,0,1,NULL,NULL,NULL,NULL,'0000-00-00 00:00:00','a:1:{s:6:\"modals\";a:7:{s:17:\"homeDashboardTour\";i:1;s:12:\"showProjects\";s:1:\"1\";s:12:\"mytimesheets\";s:1:\"1\";s:6:\"kanban\";s:1:\"1\";s:20:\"projectDashboardTour\";i:1;s:9:\"dashboard\";s:1:\"1\";s:16:\"projectDashboard\";s:1:\"1\";}}',0,NULL,'2024-03-16 11:03:55',NULL,NULL,NULL,NULL,'2024-03-16 13:36:07');
+INSERT INTO `zp_user` (`id`, `username`, `password`, `firstname`, `lastname`, `phone`, `profileId`, `lastlogin`, `status`, `expires`, `role`, `session`, `sessiontime`, `wage`, `hours`, `description`, `clientId`, `notifications`, `pwReset`, `pwResetExpiration`, `pwResetCount`, `forcePwReset`, `lastpwd_change`, `settings`, `twoFAEnabled`, `twoFASecret`, `createdOn`, `source`, `jobTitle`, `jobLevel`, `department`, `modified`) VALUES (2,'PWHdzymA1ww23qUjxxvFvNKYLbQn5ul5','$2y$10$R5JM.0ZcEkBKGBUi4ocG0uH1TP773AYOI.V.AMFf/toYRlbjKhO7m','itk-support','','','','2024-03-16 22:20:34','a',NULL,'20','f5c99df4e5d6d895191b4e2ffe7e1810f0988a3a-8005fcad7f769a8dbfdb6056bb430ff19a26213d','1710627634',NULL,NULL,NULL,0,1,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,'2024-03-16 04:04:39','api','','','','2024-03-16 04:04:39');
 /*!40000 ALTER TABLE `zp_user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -951,4 +947,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-02-29 21:26:34
+-- Dump completed on 2024-03-16 23:05:32
