@@ -130,7 +130,7 @@ CREATE TABLE `zp_canvas` (
 
 LOCK TABLES `zp_canvas` WRITE;
 /*!40000 ALTER TABLE `zp_canvas` DISABLE KEYS */;
-INSERT INTO `zp_canvas` (`id`, `title`, `author`, `created`, `projectId`, `type`, `description`) VALUES (1,'Lean Canvas',1,'2015-11-13 13:03:46',3,'leancanvas',NULL);
+INSERT INTO `zp_canvas` (`id`, `title`, `author`, `created`, `projectId`, `type`, `description`) VALUES (1,'Lean Canvas',1,'2015-11-13 13:03:46',1,'leancanvas',NULL);
 /*!40000 ALTER TABLE `zp_canvas` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -503,8 +503,8 @@ CREATE TABLE `zp_projects` (
 
 LOCK TABLES `zp_projects` WRITE;
 /*!40000 ALTER TABLE `zp_projects` DISABLE KEYS */;
-INSERT INTO `zp_projects` (`id`, `name`, `clientId`, `details`, `state`, `hourBudget`, `dollarBudget`, `active`, `menuType`, `psettings`, `parent`, `type`, `start`, `end`, `created`, `modified`, `avatar`, `cover`, `sortIndex`) VALUES (3,'Support',1,'<h3>What are you trying to accomplish?</h3>\r\n<p>&nbsp;</p>\r\n<h3>What does the world, your business or your customers journey look like when you\'re done?</h3>\r\n<p>&nbsp;</p>\r\n<h3>Why is this important?</h3>',0,'0',0,NULL,'default','restricted',0,'project',NULL,NULL,NULL,'2024-03-16 04:05:08',NULL,NULL,NULL);
-INSERT INTO `zp_projects` (`id`, `name`, `clientId`, `details`, `state`, `hourBudget`, `dollarBudget`, `active`, `menuType`, `psettings`, `parent`, `type`, `start`, `end`, `created`, `modified`, `avatar`, `cover`, `sortIndex`) VALUES (4,'Other support',1,'',0,'0',0,NULL,'default','restricted',0,'project',NULL,NULL,'2024-03-16 17:50:21','2024-03-16 17:57:13',NULL,NULL,NULL);
+INSERT INTO `zp_projects` (`id`, `name`, `clientId`, `details`, `state`, `hourBudget`, `dollarBudget`, `active`, `menuType`, `psettings`, `parent`, `type`, `start`, `end`, `created`, `modified`, `avatar`, `cover`, `sortIndex`) VALUES (1,'Support',1,'The support project',0,'0',0,NULL,'default','restricted',0,'project',NULL,NULL,NULL,'2024-03-16 04:05:08',NULL,NULL,NULL);
+INSERT INTO `zp_projects` (`id`, `name`, `clientId`, `details`, `state`, `hourBudget`, `dollarBudget`, `active`, `menuType`, `psettings`, `parent`, `type`, `start`, `end`, `created`, `modified`, `avatar`, `cover`, `sortIndex`) VALUES (2,'Other support',1,'Another support project',0,'0',0,NULL,'default','restricted',0,'project',NULL,NULL,'2024-03-16 17:50:21','2024-03-16 17:57:13',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `zp_projects` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -561,7 +561,6 @@ CREATE TABLE `zp_queue` (
 
 LOCK TABLES `zp_queue` WRITE;
 /*!40000 ALTER TABLE `zp_queue` DISABLE KEYS */;
-INSERT INTO `zp_queue` (`msghash`, `channel`, `userId`, `subject`, `message`, `thedate`, `projectId`) VALUES ('7e7de7e15f6f82f48ccde49529a07ab9','email',1,'A new To-Do was added','itk-support added a new To-Do: \'March 17, 2024 02:22 Support #52: Test ticket\n\'  <a href=\'http://leantime.itk-support.local.itkdev.dk/dashboard/home#/tickets/showTicket/60\'>Click here to see it</a>','2024-03-16 18:24:32',3);
 /*!40000 ALTER TABLE `zp_queue` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -644,13 +643,13 @@ CREATE TABLE `zp_relationuserproject` (
 
 LOCK TABLES `zp_relationuserproject` WRITE;
 /*!40000 ALTER TABLE `zp_relationuserproject` DISABLE KEYS */;
-INSERT INTO `zp_relationuserproject` (`id`, `userId`, `projectId`, `wage`, `projectRole`) VALUES (6,1,3,NULL,NULL);
-INSERT INTO `zp_relationuserproject` (`id`, `userId`, `projectId`, `wage`, `projectRole`) VALUES (7,19,3,NULL,NULL);
-INSERT INTO `zp_relationuserproject` (`id`, `userId`, `projectId`, `wage`, `projectRole`) VALUES (8,18,3,NULL,NULL);
-INSERT INTO `zp_relationuserproject` (`id`, `userId`, `projectId`, `wage`, `projectRole`) VALUES (9,20,3,NULL,NULL);
-INSERT INTO `zp_relationuserproject` (`id`, `userId`, `projectId`, `wage`, `projectRole`) VALUES (10,2,3,NULL,'');
-INSERT INTO `zp_relationuserproject` (`id`, `userId`, `projectId`, `wage`, `projectRole`) VALUES (11,1,4,NULL,'');
-INSERT INTO `zp_relationuserproject` (`id`, `userId`, `projectId`, `wage`, `projectRole`) VALUES (12,2,4,NULL,'');
+INSERT INTO `zp_relationuserproject` (`id`, `userId`, `projectId`, `wage`, `projectRole`) VALUES (6,1,1,NULL,NULL);
+INSERT INTO `zp_relationuserproject` (`id`, `userId`, `projectId`, `wage`, `projectRole`) VALUES (7,19,1,NULL,NULL);
+INSERT INTO `zp_relationuserproject` (`id`, `userId`, `projectId`, `wage`, `projectRole`) VALUES (8,18,1,NULL,NULL);
+INSERT INTO `zp_relationuserproject` (`id`, `userId`, `projectId`, `wage`, `projectRole`) VALUES (9,20,1,NULL,NULL);
+INSERT INTO `zp_relationuserproject` (`id`, `userId`, `projectId`, `wage`, `projectRole`) VALUES (10,2,1,NULL,'');
+INSERT INTO `zp_relationuserproject` (`id`, `userId`, `projectId`, `wage`, `projectRole`) VALUES (11,1,2,NULL,'');
+INSERT INTO `zp_relationuserproject` (`id`, `userId`, `projectId`, `wage`, `projectRole`) VALUES (12,2,2,NULL,'');
 /*!40000 ALTER TABLE `zp_relationuserproject` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -679,11 +678,11 @@ INSERT INTO `zp_settings` (`key`, `value`) VALUES ('companysettings.telemetry.ac
 INSERT INTO `zp_settings` (`key`, `value`) VALUES ('companysettings.telemetry.anonymousId','7e430ed5-f075-447c-a4c7-2ed842abbfc7');
 INSERT INTO `zp_settings` (`key`, `value`) VALUES ('companysettings.telemetry.lastUpdate','2024-03-17');
 INSERT INTO `zp_settings` (`key`, `value`) VALUES ('db-version','3.0.2');
-INSERT INTO `zp_settings` (`key`, `value`) VALUES ('usersettings.1.lastMessageDate','2024-03-16 18:18:46');
-INSERT INTO `zp_settings` (`key`, `value`) VALUES ('usersettings.1.lastProject','4');
-INSERT INTO `zp_settings` (`key`, `value`) VALUES ('usersettings.1.recentProjects','a:2:{i:0;i:4;i:1;i:3;}');
-INSERT INTO `zp_settings` (`key`, `value`) VALUES ('usersettings.2.lastProject','3');
-INSERT INTO `zp_settings` (`key`, `value`) VALUES ('usersettings.2.recentProjects','a:1:{i:0;i:3;}');
+INSERT INTO `zp_settings` (`key`, `value`) VALUES ('usersettings.1.lastMessageDate','2024-03-17 10:19:19');
+INSERT INTO `zp_settings` (`key`, `value`) VALUES ('usersettings.1.lastProject','1');
+INSERT INTO `zp_settings` (`key`, `value`) VALUES ('usersettings.1.recentProjects','a:2:{i:0;i:1;i:1;i:2;}');
+INSERT INTO `zp_settings` (`key`, `value`) VALUES ('usersettings.2.lastProject','2');
+INSERT INTO `zp_settings` (`key`, `value`) VALUES ('usersettings.2.recentProjects','a:1:{i:0;i:2;}');
 /*!40000 ALTER TABLE `zp_settings` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -760,9 +759,6 @@ CREATE TABLE `zp_stats` (
 
 LOCK TABLES `zp_stats` WRITE;
 /*!40000 ALTER TABLE `zp_stats` DISABLE KEYS */;
-INSERT INTO `zp_stats` (`sprintId`, `projectId`, `date`, `sum_todos`, `sum_open_todos`, `sum_progres_todos`, `sum_closed_todos`, `sum_planned_hours`, `sum_estremaining_hours`, `sum_logged_hours`, `sum_points`, `sum_points_done`, `sum_points_progress`, `sum_points_open`, `sum_todos_xs`, `sum_todos_s`, `sum_todos_m`, `sum_todos_l`, `sum_todos_xl`, `sum_todos_xxl`, `sum_todos_none`, `tickets`, `daily_avg_hours_booked_todo`, `daily_avg_hours_booked_point`, `daily_avg_hours_planned_todo`, `daily_avg_hours_planned_point`, `daily_avg_hours_remaining_point`, `daily_avg_hours_remaining_todo`, `sum_teammembers`) VALUES (-1,3,'2024-03-15 00:00:00',1,1,0,0,0,0,NULL,0,0,0,0,0,0,0,0,0,0,1,'9',NULL,NULL,0,NULL,NULL,0,1);
-INSERT INTO `zp_stats` (`sprintId`, `projectId`, `date`, `sum_todos`, `sum_open_todos`, `sum_progres_todos`, `sum_closed_todos`, `sum_planned_hours`, `sum_estremaining_hours`, `sum_logged_hours`, `sum_points`, `sum_points_done`, `sum_points_progress`, `sum_points_open`, `sum_todos_xs`, `sum_todos_s`, `sum_todos_m`, `sum_todos_l`, `sum_todos_xl`, `sum_todos_xxl`, `sum_todos_none`, `tickets`, `daily_avg_hours_booked_todo`, `daily_avg_hours_booked_point`, `daily_avg_hours_planned_todo`, `daily_avg_hours_planned_point`, `daily_avg_hours_remaining_point`, `daily_avg_hours_remaining_todo`, `sum_teammembers`) VALUES (-1,3,'2024-03-16 00:00:00',9,9,0,0,0,0,NULL,0,0,0,0,0,0,0,0,0,0,9,'42,43,44,45,46,47,48,49,50',NULL,NULL,0,NULL,NULL,0,1);
-INSERT INTO `zp_stats` (`sprintId`, `projectId`, `date`, `sum_todos`, `sum_open_todos`, `sum_progres_todos`, `sum_closed_todos`, `sum_planned_hours`, `sum_estremaining_hours`, `sum_logged_hours`, `sum_points`, `sum_points_done`, `sum_points_progress`, `sum_points_open`, `sum_todos_xs`, `sum_todos_s`, `sum_todos_m`, `sum_todos_l`, `sum_todos_xl`, `sum_todos_xxl`, `sum_todos_none`, `tickets`, `daily_avg_hours_booked_todo`, `daily_avg_hours_booked_point`, `daily_avg_hours_planned_todo`, `daily_avg_hours_planned_point`, `daily_avg_hours_remaining_point`, `daily_avg_hours_remaining_todo`, `sum_teammembers`) VALUES (-1,4,'2024-03-16 00:00:00',1,1,0,0,0,0,NULL,0,0,0,0,0,0,0,0,0,0,1,'60',NULL,NULL,0,NULL,NULL,0,1);
 /*!40000 ALTER TABLE `zp_stats` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -939,7 +935,7 @@ CREATE TABLE `zp_user` (
 
 LOCK TABLES `zp_user` WRITE;
 /*!40000 ALTER TABLE `zp_user` DISABLE KEYS */;
-INSERT INTO `zp_user` (`id`, `username`, `password`, `firstname`, `lastname`, `phone`, `profileId`, `lastlogin`, `status`, `expires`, `role`, `session`, `sessiontime`, `wage`, `hours`, `description`, `clientId`, `notifications`, `pwReset`, `pwResetExpiration`, `pwResetCount`, `forcePwReset`, `lastpwd_change`, `settings`, `twoFAEnabled`, `twoFASecret`, `createdOn`, `source`, `jobTitle`, `jobLevel`, `department`, `modified`) VALUES (1,'admin@example.com','$2y$10$1/bygAzY8n873wSfRPA47.2J4wUzP3h1n2DQwUVe6lqKt1KvTwCka','Admin','Jensen','','','2024-03-17 01:24:20','a',NULL,'50','dad35c2ee1a6c80f07cb229923996abbfd3409ae-d8a6a963c127d27ad57ab4ee07a5d09efbc186cf','1710638660',0,0,NULL,0,1,NULL,NULL,NULL,NULL,'0000-00-00 00:00:00','a:1:{s:6:\"modals\";a:8:{s:17:\"homeDashboardTour\";i:1;s:12:\"showProjects\";s:1:\"1\";s:12:\"mytimesheets\";s:1:\"1\";s:6:\"kanban\";s:1:\"1\";s:20:\"projectDashboardTour\";i:1;s:9:\"dashboard\";s:1:\"1\";s:16:\"projectDashboard\";s:1:\"1\";s:10:\"newProject\";s:1:\"1\";}}',0,NULL,'2024-03-16 11:03:55',NULL,NULL,NULL,NULL,'2024-03-16 17:50:14');
+INSERT INTO `zp_user` (`id`, `username`, `password`, `firstname`, `lastname`, `phone`, `profileId`, `lastlogin`, `status`, `expires`, `role`, `session`, `sessiontime`, `wage`, `hours`, `description`, `clientId`, `notifications`, `pwReset`, `pwResetExpiration`, `pwResetCount`, `forcePwReset`, `lastpwd_change`, `settings`, `twoFAEnabled`, `twoFASecret`, `createdOn`, `source`, `jobTitle`, `jobLevel`, `department`, `modified`) VALUES (1,'admin@example.com','$2y$10$1/bygAzY8n873wSfRPA47.2J4wUzP3h1n2DQwUVe6lqKt1KvTwCka','Admin','Jensen','','','2024-03-17 10:19:25','a',NULL,'50','88bf8932571704538d2f64b1eb6106e394e6bbd7-97803d913c2530e900efb2154b4d9a8532beb914','1710670765',0,0,NULL,0,1,NULL,NULL,NULL,NULL,'0000-00-00 00:00:00','a:1:{s:6:\"modals\";a:8:{s:17:\"homeDashboardTour\";i:1;s:12:\"showProjects\";s:1:\"1\";s:12:\"mytimesheets\";s:1:\"1\";s:6:\"kanban\";s:1:\"1\";s:20:\"projectDashboardTour\";i:1;s:9:\"dashboard\";s:1:\"1\";s:16:\"projectDashboard\";s:1:\"1\";s:10:\"newProject\";s:1:\"1\";}}',0,NULL,'2024-03-16 11:03:55',NULL,NULL,NULL,NULL,'2024-03-16 17:50:14');
 INSERT INTO `zp_user` (`id`, `username`, `password`, `firstname`, `lastname`, `phone`, `profileId`, `lastlogin`, `status`, `expires`, `role`, `session`, `sessiontime`, `wage`, `hours`, `description`, `clientId`, `notifications`, `pwReset`, `pwResetExpiration`, `pwResetCount`, `forcePwReset`, `lastpwd_change`, `settings`, `twoFAEnabled`, `twoFASecret`, `createdOn`, `source`, `jobTitle`, `jobLevel`, `department`, `modified`) VALUES (2,'PWHdzymA1ww23qUjxxvFvNKYLbQn5ul5','$2y$10$R5JM.0ZcEkBKGBUi4ocG0uH1TP773AYOI.V.AMFf/toYRlbjKhO7m','itk-support','','','','2024-03-17 01:24:32','a',NULL,'20','ee843b8d35d9fb23b55bdd16bc0e639c320d8f3a-ee7260d487b5b881059c3540d00b0aacc0cedf5a','1710638672',0,0,NULL,0,1,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,'2024-03-16 04:04:39','api','','','','2024-03-16 18:24:30');
 /*!40000 ALTER TABLE `zp_user` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -953,4 +949,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-03-17  1:25:24
+-- Dump completed on 2024-03-17 10:19:50

@@ -5,7 +5,7 @@ parameters:
             # The default ticket type. Used as fallback if no specific ticket type options are defined.
             default: &ticket_default
                 # The Leantime project id
-                project_id: 3
+                project_id: 1
 
                 # Templates for values in Leantime `leantime.rpc.tickets.addTicket` request.
                 #
@@ -34,7 +34,7 @@ parameters:
             # Handle “other support" (UVdesk project id 2)
             2:
                 <<: *ticket_default
-                project_id: 4
+                project_id: 2
                 values:
                     status: 3 // New
                     tags: 'other support, test'
