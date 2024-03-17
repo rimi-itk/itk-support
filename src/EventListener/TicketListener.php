@@ -3,12 +3,13 @@
 namespace App\EventListener;
 
 use App\Service\TicketHelper;
+use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Webkul\UVDesk\CoreFrameworkBundle\Workflow\Events\Ticket\Create;
 
 #[AsEventListener(event: 'uvdesk.automation.workflow.execute')]
-class TicketListener
+class TicketListener implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
@@ -22,7 +23,7 @@ class TicketListener
         try {
             $this->ticketHelper->handleTicket($event->getTicket());
         } catch (\Throwable $throwable) {
-            $this->logger?->error($throwable->getMessage(), [
+            $this->logger?->critical($throwable->getMessage(), [
                 'throwable' => $throwable,
             ]);
         }
