@@ -35,7 +35,7 @@ CREATE TABLE `agent_activity` (
   KEY `IDX_9AA510CE700047D2` (`ticket_id`),
   CONSTRAINT `FK_9AA510CE3414710B` FOREIGN KEY (`agent_id`) REFERENCES `uv_user` (`id`) ON DELETE CASCADE,
   CONSTRAINT `FK_9AA510CE700047D2` FOREIGN KEY (`ticket_id`) REFERENCES `uv_ticket` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -953,7 +953,7 @@ CREATE TABLE `uv_thread` (
   KEY `IDX_637D7E5DA76ED395` (`user_id`),
   CONSTRAINT `FK_637D7E5D700047D2` FOREIGN KEY (`ticket_id`) REFERENCES `uv_ticket` (`id`) ON DELETE CASCADE,
   CONSTRAINT `FK_637D7E5DA76ED395` FOREIGN KEY (`user_id`) REFERENCES `uv_user` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=80 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1009,7 +1009,7 @@ CREATE TABLE `uv_ticket` (
   CONSTRAINT `FK_C5FD9F7DC54C8C93` FOREIGN KEY (`type_id`) REFERENCES `uv_ticket_type` (`id`) ON DELETE SET NULL,
   CONSTRAINT `FK_C5FD9F7DCB20698` FOREIGN KEY (`subGroup_id`) REFERENCES `uv_support_team` (`id`) ON DELETE SET NULL,
   CONSTRAINT `FK_C5FD9F7DFE54D947` FOREIGN KEY (`group_id`) REFERENCES `uv_support_group` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1160,7 +1160,7 @@ CREATE TABLE `uv_ticket_type` (
   `is_active` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UNIQ_3E0B313677153098` (`code`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1170,6 +1170,7 @@ CREATE TABLE `uv_ticket_type` (
 LOCK TABLES `uv_ticket_type` WRITE;
 /*!40000 ALTER TABLE `uv_ticket_type` DISABLE KEYS */;
 INSERT INTO `uv_ticket_type` (`id`, `code`, `description`, `is_active`) VALUES (1,'support','Support',1);
+INSERT INTO `uv_ticket_type` (`id`, `code`, `description`, `is_active`) VALUES (2,'other support','Other support',1);
 /*!40000 ALTER TABLE `uv_ticket_type` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1586,4 +1587,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-03-16 23:50:14
+-- Dump completed on 2024-03-17  2:25:24

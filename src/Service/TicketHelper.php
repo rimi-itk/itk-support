@@ -11,25 +11,35 @@ use Webkul\UVDesk\CoreFrameworkBundle\Services\TicketService;
 
 class TicketHelper
 {
+    private readonly array $options;
+
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly TicketService $ticketService,
         private readonly LeantimeApiClient $leantime,
         private readonly Environment $twig,
         private readonly UrlGeneratorInterface $router,
-        private readonly array $options
+        array $options
     ) {
+        // Merge in default template options
+        if ($default = ($options['ticket']['default'] ?? null)) {
+            foreach ($options['ticket'] as $key => &$value) {
+                $value += $default;
+            }
+        }
+        $this->options = $options;
     }
 
     public function handleTicket(Ticket $ticket): array
     {
+        $options = $this->getTicketOptions($ticket);
         $values = [
                 'headline' => $this->renderTicketTemplate('headline', $ticket),
                 'description' => $this->renderTicketTemplate('description', $ticket),
             ]
-            + ($this->options['ticket']['values'] ?? []);
+            + ($options['values'] ?? []);
 
-        $response = $this->leantime->addTicket($this->options['ticket']['project_id'], $values);
+        $response = $this->leantime->addTicket($options['project_id'], $values);
         $id = reset($response['result']);
         $response['ticket'] = [
             'id' => $id,
@@ -59,7 +69,8 @@ class TicketHelper
 
     private function renderTicketTemplate(string $name, Ticket $ticket): string
     {
-        $template = $this->twig->createTemplate($this->options['ticket']['templates'][$name]);
+        $template = $this->getTicketOptions($ticket)['templates'][$name] ?? '';
+        $template = $this->twig->createTemplate($template);
 
         return $template->render(
             $this->getTicketRenderContext($ticket)
@@ -78,5 +89,11 @@ class TicketHelper
             + ($this->ticketService->getTicketInitialThreadDetails($ticket) ?? []);
 
         return $context;
+    }
+
+    private function getTicketOptions(Ticket $ticket): array
+    {
+        return $this->options['ticket'][$ticket->getType()?->getId()]
+            ?? $this->options['ticket']['default'];
     }
 }

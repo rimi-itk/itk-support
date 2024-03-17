@@ -29,25 +29,6 @@ Sign in as `admin@example.com` with password `password`.
 `user@example.com`
 `password!`
 
-### API
-
-<https://github.com/uvdesk/api-bundle/wiki/Ticket-Related-APIs>
-
-``` shell
-curl "http://itk-support.local.itkdev.dk/api/v1/ticket" \
-   --header "content-type: application/json" \
-   --header "authorization: Basic PQYOHLICS3FXVLM2F1SBNXEYJZOCOLZCXNHIO4TQVMW040VM6XQT2BADNSIHESRC" \
-   --data @- <<'JSON'
-{
- "name": "Test user",
- "from": "user@example.com",
- "actAsType": "customer",
- "subject": "Test ticket",
- "message": "This is a test ticket created via the UVdesk API"
-}
-JSON
-```
-
 ### Email
 
 ``` shell
@@ -84,16 +65,52 @@ Talk to Leantime:
 docker compose exec leantime bin/leantime
 ```
 
-<https://docs.leantime.io/#/api/usage>
+## Manual testing with APIs
+
+Using the UVdesk API we can create a couple of tickets (cf. <https://github.com/uvdesk/api-bundle/wiki/Ticket-Related-APIs>).
 
 ``` shell
+# Create a [`support`](http://itk-support.local.itkdev.dk/en/member/ticket-types/update/1) ticket:
+curl "http://$(docker compose port nginx 8080)/api/v1/ticket" \
+   --silent \
+   --header "content-type: application/json" \
+   --header "authorization: Basic PQYOHLICS3FXVLM2F1SBNXEYJZOCOLZCXNHIO4TQVMW040VM6XQT2BADNSIHESRC" \
+   --data @- <<'JSON' | docker run --rm --interactive backplane/jq '.'
+{
+ "type": "support",
+ "name": "Test user",
+ "from": "user@example.com",
+ "actAsType": "customer",
+ "subject": "Test ticket",
+ "message": "This is a test ticket created via the UVdesk API"
+}
+JSON
+
+# Create an [`other support`](http://itk-support.local.itkdev.dk/en/member/ticket-types/update/2) ticket:
+curl "http://$(docker compose port nginx 8080)/api/v1/ticket" \
+   --silent \
+   --header "content-type: application/json" \
+   --header "authorization: Basic PQYOHLICS3FXVLM2F1SBNXEYJZOCOLZCXNHIO4TQVMW040VM6XQT2BADNSIHESRC" \
+   --data @- <<'JSON' | docker run --rm --interactive backplane/jq '.'
+{
+ "type": "other support",
+ "name": "Test user",
+ "from": "user@example.com",
+ "actAsType": "customer",
+ "subject": "Test ticket",
+ "message": "This is a test ticket created via the UVdesk API"
+}
+JSON
+
+# Check that the two tickets have been createc in Leantime (cf. <https://docs.leantime.io/#/api/usage>):
 curl "http://$(docker compose port leantime 80)/api/jsonrpc" \
+   --silent \
    --header "content-type: application/json" \
    --header "x-api-key: lt_PWHdzymA1ww23qUjxxvFvNKYLbQn5ul5_z2bcwjnCWz8bP1niLI4wAehq6cI1fWA9" \
-   --data @- <<'JSON'
+   --data @- <<'JSON' | docker run --rm --interactive backplane/jq '[.result[] | {id: .id, projectId: .projectId, headline: .headline, description: .description}]'
 {
  "jsonrpc": "2.0",
- "method": "leantime.rpc.projects.getAll",
+ "method": "leantime.rpc.tickets.getAll",
  "id": "test",
  "params": {}
 }

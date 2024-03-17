@@ -23,8 +23,10 @@ final class LeantimeApiClient
     public function addTicket(int $projectId, array $values): array
     {
         return $this->post('leantime.rpc.tickets.addTicket', [
-            'project_id' => $projectId,
-            'values' => $values,
+            'values' => $values
+                + [
+                    'projectId' => $projectId,
+                ],
         ]);
     }
 
