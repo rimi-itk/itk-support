@@ -15,7 +15,7 @@ parameters:
                 # @param \Webkul\UVDesk\CoreFrameworkBundle\Entity\Ticket ticket The ticket
                 templates:
                     headline: |
-                        {{ 'now'|date }} Support #{{ ticket.id }}: {{ ticket.subject }}
+                        Support #{{ ticket.id }}: {{ ticket.subject }}
 
                     description: |
                         <div class="support-header">
