@@ -18,6 +18,7 @@ parameters:
     ignoreErrors:
         - '#Method .+ has parameter .+ with no value type specified in iterable type array#'
         - '#Method .+ return type has no value type specified in iterable type array.#'
+        - '#Property .+::\$ticketRepository \(Webkul\\UVDesk\\CoreFrameworkBundle\\Repository\\TicketRepository\) does not accept Doctrine\\ORM\\EntityRepository\<Webkul\\UVDesk\\CoreFrameworkBundle\\Entity\\Ticket\>.#'
 
     checkGenericClassInNonGenericObjectType: false
 

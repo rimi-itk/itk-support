@@ -1,6 +1,9 @@
 # This file is the entry point to configure your own services.
 # Files in the packages/ subdirectory configure your dependencies.
 
+imports:
+    - { resource: ../ticket_handler.local.yaml }
+
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
@@ -33,42 +36,7 @@ services:
     # please note that last definitions always *replace* previous ones
     App\Service\TicketHelper:
         arguments:
-            $options:
-                note:
-                    source: 'leantime handler'
-                    created_by: 'leantime handler'
-                    is_bookmarked: true
-                    message_template: 'Leantime URL: <a href="{{ ticket_url }}">{{ ticket_url }}</a>'
-
-                ticket:
-                   # The default ticket type
-                   default:
-                       templates:
-                           headline: |
-                               {{ 'now'|date }} Support #{{ ticket.id }}: {{ ticket.subject }}
-
-                           description: |
-                               <div class="support-header">
-                               Support ticket #{{ ticket.id }} (<a href="{{ ticket_url }}">{{ ticket_url}}</a>)
-                               </div>
-
-                               <div class="support-message">
-                               {{ message|raw }}
-                               </div>
-
-                       # @TODO This should depend in UVdesk ticket type
-                       project_id: 3
-                       values:
-                           status: 3 // New
-                           tags: 'support, test'
-
-                   # Handle “other support"
-                   2:
-                       project_id: 4
-                       values:
-                           status: 3 // New
-                           tags: 'other support, test'
-
+            $options: '%ticket_helper_options%'
 
     App\Service\LeantimeApiClient:
         arguments:

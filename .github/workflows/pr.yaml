@@ -33,6 +33,7 @@ jobs:
       fail-fast: false
     steps:
       - uses: actions/checkout@master
+      - run: cp ticket_handler.local.yaml.example ticket_handler.local.yaml
       - run: docker network create frontend
       - run: docker compose up --detach
       - run: docker compose exec --user root phpfpm composer install
@@ -47,6 +48,7 @@ jobs:
       fail-fast: false
     steps:
       - uses: actions/checkout@master
+      - run: cp ticket_handler.local.yaml.example ticket_handler.local.yaml
       - run: docker network create frontend
       - run: docker compose up --detach
       - run: docker compose exec --user root phpfpm composer install
@@ -60,6 +62,7 @@ jobs:
       fail-fast: false
     steps:
       - uses: actions/checkout@master
+      - run: cp ticket_handler.local.yaml.example ticket_handler.local.yaml
       - run: docker network create frontend
       - run: docker compose up --detach
       - run: docker compose exec --user root phpfpm composer install
@@ -76,6 +79,17 @@ jobs:
       - name: coding-standards-check/markdownlint
         run: docker compose run --rm node yarn coding-standards-check/markdownlint
 
+  coding-standards-yamllint:
+    runs-on: ubuntu-latest
+    name: yamllint
+    strategy:
+      fail-fast: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Lint YAML
+        run: docker run --volume ${PWD}:/code --rm pipelinecomponents/yamllint yamllint ticket_handler.local.yaml.example
+
   code-analysis-phpstan:
     name: code-analysis/phpstan
     runs-on: ubuntu-latest
@@ -83,6 +97,7 @@ jobs:
       fail-fast: false
     steps:
       - uses: actions/checkout@master
+      - run: cp ticket_handler.local.yaml.example ticket_handler.local.yaml
       - run: docker network create frontend
       - run: docker compose up --detach
       - run: docker compose exec --user root phpfpm composer install

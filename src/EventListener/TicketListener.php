@@ -21,7 +21,7 @@ class TicketListener implements LoggerAwareInterface
     public function __invoke(Create $event): void
     {
         try {
-            $this->ticketHelper->handleTicket($event->getTicket());
+            $this->ticketHelper->handleTicketCreated($event->getTicket());
         } catch (\Throwable $throwable) {
             $this->logger?->critical($throwable->getMessage(), [
                 'throwable' => $throwable,

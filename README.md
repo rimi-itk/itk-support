@@ -1,5 +1,9 @@
 # ITK support
 
+``` shell
+cp ticket_handler.local.yaml.example ticket_handler.local.yaml
+```
+
 ```shell
 docker compose pull
 docker compose up --build --detach
@@ -75,7 +79,7 @@ curl "http://$(docker compose port nginx 8080)/api/v1/ticket" \
    --silent \
    --header "content-type: application/json" \
    --header "authorization: Basic PQYOHLICS3FXVLM2F1SBNXEYJZOCOLZCXNHIO4TQVMW040VM6XQT2BADNSIHESRC" \
-   --data @- <<'JSON' | docker run --rm --interactive backplane/jq '.'
+   --data @- <<'JSON' | docker run --rm --interactive backplane/jq --raw-input '. as $raw | try fromjson catch $raw'
 {
  "type": "support",
  "name": "Test user",
@@ -91,7 +95,7 @@ curl "http://$(docker compose port nginx 8080)/api/v1/ticket" \
    --silent \
    --header "content-type: application/json" \
    --header "authorization: Basic PQYOHLICS3FXVLM2F1SBNXEYJZOCOLZCXNHIO4TQVMW040VM6XQT2BADNSIHESRC" \
-   --data @- <<'JSON' | docker run --rm --interactive backplane/jq '.'
+   --data @- <<'JSON' | docker run --rm --interactive backplane/jq --raw-input '. as $raw | try fromjson catch $raw'
 {
  "type": "other support",
  "name": "Test user",
@@ -107,7 +111,7 @@ curl "http://$(docker compose port leantime 80)/api/jsonrpc" \
    --silent \
    --header "content-type: application/json" \
    --header "x-api-key: lt_PWHdzymA1ww23qUjxxvFvNKYLbQn5ul5_z2bcwjnCWz8bP1niLI4wAehq6cI1fWA9" \
-   --data @- <<'JSON' | docker run --rm --interactive backplane/jq '[.result[] | {id: .id, projectId: .projectId, headline: .headline, description: .description}]'
+   --data @- <<'JSON' | docker run --rm --interactive backplane/jq '[.result[] | {id: .id, projectId: .projectId, headline: .headline, description: .description}] as $raw | try fromjson catch $raw'
 {
  "jsonrpc": "2.0",
  "method": "leantime.rpc.tickets.getAll",
