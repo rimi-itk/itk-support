@@ -71,54 +71,25 @@ docker compose exec leantime bin/leantime
 
 ## Manual testing with APIs
 
-Using the UVdesk API we can create a couple of tickets (cf. <https://github.com/uvdesk/api-bundle/wiki/Ticket-Related-APIs>).
+The script [`tests/api-test`](tests/api-test) can be run to
+
+1. test creating a couple of support tickets using UVdesk's API (cf.
+   <https://github.com/uvdesk/api-bundle/wiki/Ticket-Related-APIs>) and
+2. using the [Leantime API](https://docs.leantime.io/#/api/usage) to check that
+   corresponsing tickets are created in Leantime:
+
+Run the script:
 
 ``` shell
-# Create a [`support`](http://itk-support.local.itkdev.dk/en/member/ticket-types/update/1) ticket:
-curl "http://$(docker compose port nginx 8080)/api/v1/ticket" \
-   --silent \
-   --header "content-type: application/json" \
-   --header "authorization: Basic PQYOHLICS3FXVLM2F1SBNXEYJZOCOLZCXNHIO4TQVMW040VM6XQT2BADNSIHESRC" \
-   --data @- <<'JSON' | docker run --rm --interactive backplane/jq --raw-input '. as $raw | try fromjson catch $raw'
-{
- "type": "support",
- "name": "Test user",
- "from": "user@example.com",
- "actAsType": "customer",
- "subject": "Test ticket",
- "message": "This is a test ticket created via the UVdesk API"
-}
-JSON
+./tests/api-test
+```
 
-# Create an [`other support`](http://itk-support.local.itkdev.dk/en/member/ticket-types/update/2) ticket:
-curl "http://$(docker compose port nginx 8080)/api/v1/ticket" \
-   --silent \
-   --header "content-type: application/json" \
-   --header "authorization: Basic PQYOHLICS3FXVLM2F1SBNXEYJZOCOLZCXNHIO4TQVMW040VM6XQT2BADNSIHESRC" \
-   --data @- <<'JSON' | docker run --rm --interactive backplane/jq --raw-input '. as $raw | try fromjson catch $raw'
-{
- "type": "other support",
- "name": "Test user",
- "from": "user@example.com",
- "actAsType": "customer",
- "subject": "Test ticket",
- "message": "This is a test ticket created via the UVdesk API"
-}
-JSON
+The scripts assumes use of [Traefik](https://doc.traefik.io/traefik/), but can
+run using plain [`docker compose` port
+bindings](https://docs.docker.com/reference/cli/docker/compose/port/):
 
-# Check that the two tickets have been createc in Leantime (cf. <https://docs.leantime.io/#/api/usage>):
-curl "http://$(docker compose port leantime 80)/api/jsonrpc" \
-   --silent \
-   --header "content-type: application/json" \
-   --header "x-api-key: lt_PWHdzymA1ww23qUjxxvFvNKYLbQn5ul5_z2bcwjnCWz8bP1niLI4wAehq6cI1fWA9" \
-   --data @- <<'JSON' | docker run --rm --interactive backplane/jq '[.result[] | {id: .id, projectId: .projectId, headline: .headline, description: .description}] as $raw | try fromjson catch $raw'
-{
- "jsonrpc": "2.0",
- "method": "leantime.rpc.tickets.getAll",
- "id": "test",
- "params": {}
-}
-JSON
+``` shell
+USE_TRAEFIK=0 ./tests/api-test
 ```
 
 ## Coding standards
@@ -138,6 +109,10 @@ docker compose run --rm node yarn coding-standards-check
 
 ```shell
 docker compose run --rm node yarn coding-standards-apply
+```
+
+``` shell
+docker run --volume ${PWD}:/code --rm pipelinecomponents/yamllint yamllint ticket_handler.local.yaml.example
 ```
 
 ## Code analysis

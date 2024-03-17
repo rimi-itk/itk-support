@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+set -o errexit -o errtrace -o noclobber -o nounset -o pipefail
+IFS=$'\n\t'
+
+bold=$(tput -Txterm-256color bold)
+normal=$(tput -Txterm-256color sgr0)
+
+function heading() {
+    echo
+    echo -n "${bold}"
+    echo "$@"
+    echo -n "${normal}"
+    echo
+}
+
+UVDESK_URL="http://itk-support.local.itkdev.dk"
+UVDESK_API_KEY="PQYOHLICS3FXVLM2F1SBNXEYJZOCOLZCXNHIO4TQVMW040VM6XQT2BADNSIHESRC"
+
+LEANTIME_URL="http://leantime.itk-support.local.itkdev.dk"
+LEANTIME_API_KEY="lt_PWHdzymA1ww23qUjxxvFvNKYLbQn5ul5_z2bcwjnCWz8bP1niLI4wAehq6cI1fWA9"
+
+if [[ "${USE_TRAEFIK:-1}" != "1" ]]; then
+    UVDESK_URL="http://$(docker compose port nginx 8080)"
+    LEANTIME_URL="http://$(docker compose port leantime 80)"
+fi
+
+cat <<EOF
+
+UVdesk URL:   $UVDESK_URL
+Leantime URL: $LEANTIME_URL
+
+EOF
+
+heading 'Create a "support" ticket (<http://itk-support.local.itkdev.dk/en/member/ticket-types/update/1>)'
+
+curl "$UVDESK_URL/api/v1/ticket" \
+   --no-progress-meter \
+   --header "content-type: application/json" \
+   --header "authorization: Basic $UVDESK_API_KEY" \
+   --data @- <<'JSON' | docker run --rm --interactive backplane/jq --raw-input '. as $raw | try fromjson catch $raw'
+{
+ "type": "support",
+ "name": "Test user",
+ "from": "user@example.com",
+ "actAsType": "customer",
+ "subject": "Test ticket",
+ "message": "This is a test ticket created via the UVdesk API"
+}
+JSON
+
+heading 'Create an "other support" ticket (<http://itk-support.local.itkdev.dk/en/member/ticket-types/update/2>)'
+
+curl "$UVDESK_URL/api/v1/ticket" \
+   --no-progress-meter \
+   --header "content-type: application/json" \
+   --header "authorization: Basic $UVDESK_API_KEY" \
+   --data @- <<'JSON' | docker run --rm --interactive backplane/jq --raw-input '. as $raw | try fromjson catch $raw'
+{
+ "type": "other support",
+ "name": "Test user",
+ "from": "user@example.com",
+ "actAsType": "customer",
+ "subject": "Test ticket",
+ "message": "This is a test ticket created via the UVdesk API"
+}
+JSON
+
+heading 'Check that the two tickets have been created in Leantime (cf. <https://docs.leantime.io/#/api/usage>)'
+
+curl "$LEANTIME_URL/api/jsonrpc" \
+   --no-progress-meter \
+   --header "content-type: application/json" \
+   --header "x-api-key: $LEANTIME_API_KEY" \
+   --data @- <<'JSON' | docker run --rm --interactive backplane/jq '[.result[] | {id: .id, projectId: .projectId, headline: .headline, description: .description}][0:2] as $raw | try fromjson catch $raw'
+{
+ "jsonrpc": "2.0",
+ "method": "leantime.rpc.tickets.getAll",
+ "id": "test",
+ "params": {}
+}
+JSON

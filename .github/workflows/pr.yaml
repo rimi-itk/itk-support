@@ -33,10 +33,11 @@ jobs:
       fail-fast: false
     steps:
       - uses: actions/checkout@master
-      - run: cp ticket_handler.local.yaml.example ticket_handler.local.yaml
-      - run: docker network create frontend
-      - run: docker compose up --detach
-      - run: docker compose exec --user root phpfpm composer install
+      - run: |
+          cp ticket_handler.local.yaml.example ticket_handler.local.yaml
+          docker network create frontend
+          docker compose up --wait
+          docker compose exec --user root phpfpm composer install
       - name: Normalize composer
         # https://github.com/ergebnis/composer-normalize?tab=readme-ov-file#continuous-integration
         run: docker compose run --rm phpfpm composer normalize --dry-run
@@ -48,10 +49,11 @@ jobs:
       fail-fast: false
     steps:
       - uses: actions/checkout@master
-      - run: cp ticket_handler.local.yaml.example ticket_handler.local.yaml
-      - run: docker network create frontend
-      - run: docker compose up --detach
-      - run: docker compose exec --user root phpfpm composer install
+      - run: |
+          cp ticket_handler.local.yaml.example ticket_handler.local.yaml
+          docker network create frontend
+          docker compose up --wait
+          docker compose exec --user root phpfpm composer install
       - name: coding-standards-check/php-cs-fixer
         run: docker compose exec --user root phpfpm composer coding-standards-check/php-cs-fixer
 
@@ -62,10 +64,11 @@ jobs:
       fail-fast: false
     steps:
       - uses: actions/checkout@master
-      - run: cp ticket_handler.local.yaml.example ticket_handler.local.yaml
-      - run: docker network create frontend
-      - run: docker compose up --detach
-      - run: docker compose exec --user root phpfpm composer install
+      - run: |
+          cp ticket_handler.local.yaml.example ticket_handler.local.yaml
+          docker network create frontend
+          docker compose up --wait
+          docker compose exec --user root phpfpm composer install
       - name: coding-standards-check/twig-cs-fixer
         run: docker compose exec --user root phpfpm composer coding-standards-check/twig-cs-fixer
 
@@ -81,14 +84,25 @@ jobs:
 
   coding-standards-yamllint:
     runs-on: ubuntu-latest
-    name: yamllint
+    name: coding-standards-yamllint
     strategy:
       fail-fast: false
     steps:
       - name: Checkout
         uses: actions/checkout@master
       - name: Lint YAML
-        run: docker run --volume ${PWD}:/code --rm pipelinecomponents/yamllint yamllint ticket_handler.local.yaml.example
+        run: docker run --volume "${PWD}:/code" --rm pipelinecomponents/yamllint yamllint ticket_handler.local.yaml.example
+
+  coding-standards-shellcheck:
+    runs-on: ubuntu-latest
+    name: coding-standards-shellcheck
+    strategy:
+      fail-fast: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Lint scripts
+        run: docker run --rm --volume "${PWD}:/mnt" koalaman/shellcheck:stable tests/api-test
 
   code-analysis-phpstan:
     name: code-analysis/phpstan
@@ -97,9 +111,23 @@ jobs:
       fail-fast: false
     steps:
       - uses: actions/checkout@master
-      - run: cp ticket_handler.local.yaml.example ticket_handler.local.yaml
-      - run: docker network create frontend
-      - run: docker compose up --detach
-      - run: docker compose exec --user root phpfpm composer install
+      - run: |
+          cp ticket_handler.local.yaml.example ticket_handler.local.yaml
+          docker network create frontend
+          docker compose up --wait
+          docker compose exec --user root phpfpm composer install
       - name: code-analysis/phpstan
         run: docker compose exec --user root phpfpm composer code-analysis/phpstan
+
+  test-api-test:
+    name: test-api-test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - run: |
+          cp ticket_handler.local.yaml.example ticket_handler.local.yaml
+          docker network create frontend
+          docker compose up --wait
+          docker compose exec --user root phpfpm composer install
+      - run: |
+          USE_TRAEFIK=0 ./tests/api-test
