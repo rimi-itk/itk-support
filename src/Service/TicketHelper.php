@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Exception\TicketException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -35,7 +36,10 @@ class TicketHelper
             + ($options['values'] ?? []);
 
         $response = $this->leantime->addTicket($options['project_id'], $values);
-        $id = reset($response['result']);
+        if (!isset($response['result'])) {
+            throw new TicketException(sprintf('Error creating ticket in Leantime. Response: %s', json_encode($response)));
+        }
+        $id = (int) reset($response['result']);
         $response['ticket'] = [
             'id' => $id,
             'url' => $this->leantime->getTicketUrl($id),
