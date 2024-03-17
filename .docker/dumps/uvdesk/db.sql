@@ -101,10 +101,7 @@ CREATE TABLE `migration_versions` (
 
 LOCK TABLES `migration_versions` WRITE;
 /*!40000 ALTER TABLE `migration_versions` DISABLE KEYS */;
-INSERT INTO `migration_versions` (`version`, `executed_at`) VALUES ('20240308123921','2024-03-15 22:48:18');
-INSERT INTO `migration_versions` (`version`, `executed_at`) VALUES ('20240308125534','2024-03-15 22:48:18');
-INSERT INTO `migration_versions` (`version`, `executed_at`) VALUES ('20240308125633','2024-03-15 22:48:18');
-INSERT INTO `migration_versions` (`version`, `executed_at`) VALUES ('20240308125754','2024-03-15 22:48:18');
+INSERT INTO `migration_versions` (`version`, `executed_at`) VALUES ('20240317221812','2024-03-15 22:48:18');
 /*!40000 ALTER TABLE `migration_versions` ENABLE KEYS */;
 UNLOCK TABLES;
 
