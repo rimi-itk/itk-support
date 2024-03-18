@@ -18,8 +18,11 @@ class TicketListener implements LoggerAwareInterface
     ) {
     }
 
-    public function __invoke(Create $event): void
+    public function __invoke(mixed $event): void
     {
+        if (!($event instanceof Create)) {
+            return;
+        }
         try {
             $this->ticketHelper->handleTicketCreated($event->getTicket());
         } catch (\Throwable $throwable) {
