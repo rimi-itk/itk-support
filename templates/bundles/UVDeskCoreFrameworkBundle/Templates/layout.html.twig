@@ -1,0 +1,10 @@
+{# @see https://symfony.com/blog/new-in-symfony-3-4-improved-the-overriding-of-templates#overriding-and-extending-templates #}
+{% extends '@!UVDeskCoreFramework//Templates/layout.html.twig' %}
+
+{% block pageWrapper %}
+    {% if admin_message is not empty %}
+        {{ include(template_from_string(admin_message)) }}
+    {% endif %}
+
+    {{ parent() }}
+{% endblock %}

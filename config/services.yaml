@@ -43,3 +43,6 @@ services:
             $options:
                 url: '%env(LEANTIME_URL)%'
                 api_key: '%env(LEANTIME_API_KEY)%'
+
+    # @see https://twig.symfony.com/doc/3.x/functions/template_from_string.html
+    Twig\Extension\StringLoaderExtension:
