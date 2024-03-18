@@ -1,10 +1,13 @@
 # This file is the entry point to configure your own services.
 # Files in the packages/ subdirectory configure your dependencies.
 
+imports:
+    - { resource: ../ticket_handler.local.yaml }
+
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-    locale: 'en'
+    locale: da
     uvdesk.version: "v1.1.3"
     google_recaptcha_site_key: '%env(GOOGLE_RECAPTCHA_SITE_KEY)%'
 
@@ -22,12 +25,24 @@ services:
     App\:
         resource: '../src/*'
         exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
-    
+
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
     App\Controller\:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
-    
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    App\Service\TicketHelper:
+        arguments:
+            $options: '%ticket_helper_options%'
+
+    App\Service\LeantimeApiClient:
+        arguments:
+            $options:
+                url: '%env(LEANTIME_URL)%'
+                api_key: '%env(LEANTIME_API_KEY)%'
+
+    # @see https://twig.symfony.com/doc/3.x/functions/template_from_string.html
+    Twig\Extension\StringLoaderExtension:

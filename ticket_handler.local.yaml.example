@@ -1,0 +1,53 @@
+parameters:
+    ticket_helper_options:
+        # Leantime ticket parameters
+        ticket:
+            # The default ticket type. Used as fallback if no specific ticket type options are defined.
+            default: &ticket_default
+                # The Leantime project id
+                project_id: 1
+
+                # Templates for values in Leantime `leantime.rpc.tickets.addTicket` request.
+                #
+                # @param array details The ticket details
+                #   (cf. https://github.com/uvdesk/core-framework/blob/master/Services/TicketService.php#L1133)
+                # @param string ticket_url The absolute ticket URL
+                # @param \Webkul\UVDesk\CoreFrameworkBundle\Entity\Ticket ticket The ticket
+                templates:
+                    headline: |
+                        Support #{{ ticket.id }}: {{ ticket.subject }}
+
+                    description: |
+                        <div class="support-header">
+                        Support ticket #{{ ticket.id }} (<a href="{{ ticket_url }}">{{ ticket_url}}</a>)
+                        </div>
+
+                        <div class="support-message">
+                        {{ details.message|raw }}
+                        </div>
+
+                # Values in Leantime `leantime.rpc.tickets.addTicket` request.
+                values:
+                    status: 3 // New
+                    tags: 'support, test'
+
+            # Handle “other support" (UVdesk project id 2)
+            2:
+                <<: *ticket_default
+                project_id: 2
+                values:
+                    status: 3 // New
+                    tags: 'other support, test'
+
+        # UVdesk ticket note parameters
+        note:
+            source: 'leantime handler'
+            created_by: 'leantime handler'
+            is_bookmarked: true
+            # @param string ticket_url The Leantime ticket URL
+            message_template: 'Leantime URL: <a href="{{ ticket_url }}">{{ ticket_url }}</a>'
+
+
+# Local Variables:
+# mode: yaml
+# End:

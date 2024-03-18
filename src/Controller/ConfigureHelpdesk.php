@@ -3,17 +3,16 @@
 namespace App\Controller;
 
 use Doctrine\DBAL\DriverManager;
-use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Tools\Setup;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Yaml\Yaml;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Webkul\UVDesk\CoreFrameworkBundle\Entity\SupportRole;
 use Webkul\UVDesk\CoreFrameworkBundle\Entity\User;
@@ -22,10 +21,10 @@ use Webkul\UVDesk\CoreFrameworkBundle\Services\UVDeskService;
 
 class ConfigureHelpdesk extends AbstractController
 {
-    const DB_URL_TEMPLATE = "mysql://[user]:[password]@[host]:[port]";
-    const DB_ENV_PATH_TEMPLATE = "DATABASE_URL=DB_DRIVER://DB_USER:DB_PASSWORD@DB_HOST/DB_NAME\n";
-    const DB_ENV_PATH_PARAM_TEMPLATE = "env(DATABASE_URL): 'DB_DRIVER://DB_USER:DB_PASSWORD@DB_HOST/DB_NAME'\n";
-    const DEFAULT_JSON_HEADERS = [
+    public const DB_URL_TEMPLATE = 'mysql://[user]:[password]@[host]:[port]';
+    public const DB_ENV_PATH_TEMPLATE = "DATABASE_URL=DB_DRIVER://DB_USER:DB_PASSWORD@DB_HOST/DB_NAME\n";
+    public const DB_ENV_PATH_PARAM_TEMPLATE = "env(DATABASE_URL): 'DB_DRIVER://DB_USER:DB_PASSWORD@DB_HOST/DB_NAME'\n";
+    public const DEFAULT_JSON_HEADERS = [
         'Content-Type' => 'application/json',
     ];
 
@@ -87,62 +86,62 @@ class ConfigureHelpdesk extends AbstractController
                 ];
                 break;
             case 'php-maximum-execution':
-                $response['status' ] = $max_execution_time >= 30 ? true : false;
+                $response['status'] = $max_execution_time >= 30 ? true : false;
 
                 if ($response['status']) {
                     $response['message'] = sprintf('Maximum execution time is %s', ini_get('max_execution_time').' sec');
                 } else {
-                    $response['message'] = sprintf('Please increase your max execution time.' );
+                    $response['message'] = sprintf('Please increase your max execution time.');
                     $response['description'] = '</span>Issue can be resolved by simply<p><a href="https://www.simplified.guide/php/increase-max-execution-time" target="_blank"> increasing your maximum execution time</a> make it 60 or more and restart your server after making this change, refresh the browser and try again.</p>';
                 }
                 break;
             case 'php-envfile-permission':
-                    $filename =  $kernel->getProjectDir().'/.env';
-                    $response['status'] = is_writable($filename) ? true : false;
-   
-                    if ($response['status']) {
-                        $response['message'] = sprintf('Read/Write permission enabled for .env file.');
-                    } else {
-                        $response['message'] = sprintf('Please enable read/write permission for <b>.env</b> file of your project.');
-                        $response['description'] = '</span> Issue can be resolved by simply <a href="https://www.uvdesk.com/en/blog/open-source-helpdesk-installation-on-ubuntu-uvdesk/" target="_blank"><p> enabling your <b>.env</b> file read/write permission</a> refresh the browser and try again.</p>';
-                    }
+                $filename = $kernel->getProjectDir().'/.env';
+                $response['status'] = is_writable($filename) ? true : false;
+
+                if ($response['status']) {
+                    $response['message'] = sprintf('Read/Write permission enabled for .env file.');
+                } else {
+                    $response['message'] = sprintf('Please enable read/write permission for <b>.env</b> file of your project.');
+                    $response['description'] = '</span> Issue can be resolved by simply <a href="https://www.uvdesk.com/en/blog/open-source-helpdesk-installation-on-ubuntu-uvdesk/" target="_blank"><p> enabling your <b>.env</b> file read/write permission</a> refresh the browser and try again.</p>';
+                }
                 break;
             case 'php-configfiles-permission':
-                    $configfiles_status = array_map(function ($configfile) use ($kernel) {
-                        return [
-                            $configfile['name'] => is_writable($kernel->getProjectDir().'/config/packages/'.$configfile['name'].'.yaml') ,
-                        ];
-                    }, self::$requiredConfigfiles);
-   
-                    $response = [
-                        'configfiles' => $configfiles_status,
-                        'description' => '</span> <br><p> Issue can be resolved by simply <a href="https://www.uvdesk.com/en/blog/open-source-helpdesk-installation-on-ubuntu-uvdesk/" target="_blank"> enabling read/write permissions for your files under config/packages folder of your project.</a></p>',
+                $configfiles_status = array_map(function ($configfile) use ($kernel) {
+                    return [
+                        $configfile['name'] => is_writable($kernel->getProjectDir().'/config/packages/'.$configfile['name'].'.yaml'),
                     ];
+                }, self::$requiredConfigfiles);
+
+                $response = [
+                    'configfiles' => $configfiles_status,
+                    'description' => '</span> <br><p> Issue can be resolved by simply <a href="https://www.uvdesk.com/en/blog/open-source-helpdesk-installation-on-ubuntu-uvdesk/" target="_blank"> enabling read/write permissions for your files under config/packages folder of your project.</a></p>',
+                ];
                 break;
             default:
                 $code = 404;
                 break;
         }
-        
+
         return new Response(json_encode($response ?? []), $code ?? 200, self::DEFAULT_JSON_HEADERS);
     }
 
     public function verifyDatabaseCredentials(Request $request)
     {
-        if (session_status() == PHP_SESSION_NONE) {
+        if (PHP_SESSION_NONE == session_status()) {
             session_start();
         }
-        
+
         try {
             $connectionUrl = strtr(self::DB_URL_TEMPLATE, [
-                '[host]' => $request->request->get('serverName'), 
-                '[port]' => $request->request->get('serverPort'), 
-                '[user]' => $request->request->get('username'), 
-                '[password]' => $request->request->get('password'), 
+                '[host]' => $request->request->get('serverName'),
+                '[port]' => $request->request->get('serverPort'),
+                '[user]' => $request->request->get('username'),
+                '[password]' => $request->request->get('password'),
             ]);
 
-            if ($request->request->get('serverVersion') != null) {
-                $connectionUrl .= "?serverVersion=" . $request->request->get('serverVersion');
+            if (null != $request->request->get('serverVersion')) {
+                $connectionUrl .= '?serverVersion='.$request->request->get('serverVersion');
             }
 
             $databaseConnection = DriverManager::getConnection([
@@ -150,7 +149,7 @@ class ConfigureHelpdesk extends AbstractController
             ]);
 
             $entityManager = EntityManager::create($databaseConnection, Setup::createAnnotationMetadataConfiguration(['src/Entity'], false));
-            
+
             // Establish a connection if not active
             if (false == $databaseConnection->isConnected()) {
                 $databaseConnection->connect();
@@ -162,7 +161,7 @@ class ConfigureHelpdesk extends AbstractController
             if (!in_array($request->request->get('database'), $databaseConnection->getSchemaManager()->listDatabases()) && false == $createDatabase) {
                 return new JsonResponse([
                     'status' => false,
-                    'message' => "The requested database was not found."
+                    'message' => 'The requested database was not found.',
                 ]);
             }
 
@@ -179,19 +178,19 @@ class ConfigureHelpdesk extends AbstractController
         } catch (\Exception $e) {
             return new JsonResponse([
                 'status' => false,
-                'message' => "Failed to establish a connection with database server."
+                'message' => 'Failed to establish a connection with database server.',
             ]);
         }
-        
+
         return new JsonResponse(['status' => true]);
     }
 
     public function prepareSuperUserDetailsXHR(Request $request)
     {
-        if (session_status() == PHP_SESSION_NONE) {
+        if (PHP_SESSION_NONE == session_status()) {
             session_start();
         }
-        
+
         // unset($_SESSION['USER_DETAILS']);
 
         $_SESSION['USER_DETAILS'] = [
@@ -205,7 +204,7 @@ class ConfigureHelpdesk extends AbstractController
 
     public function updateConfigurationsXHR(Request $request, KernelInterface $kernel)
     {
-        if (session_status() == PHP_SESSION_NONE) {
+        if (PHP_SESSION_NONE == session_status()) {
             session_start();
         }
 
@@ -220,10 +219,10 @@ class ConfigureHelpdesk extends AbstractController
 
         try {
             $connectionUrl = strtr(self::DB_URL_TEMPLATE, [
-                '[host]' => $database_host, 
-                '[port]' => $database_port, 
-                '[user]' => $database_user, 
-                '[password]' => $database_pass, 
+                '[host]' => $database_host,
+                '[port]' => $database_port,
+                '[user]' => $database_user,
+                '[password]' => $database_pass,
             ]);
 
             if (!empty($database_version)) {
@@ -246,17 +245,17 @@ class ConfigureHelpdesk extends AbstractController
                 if (false == $create_database) {
                     throw new \Exception('Database does not exist.');
                 }
-                
+
                 // Create database
                 $databaseConnection->getSchemaManager()->createDatabase($databaseConnection->getDatabasePlatform()->quoteSingleIdentifier($database_name));
             }
 
-            $connectionUrl = strtr(self::DB_URL_TEMPLATE . "/[database]", [
-                '[host]' => $database_host, 
-                '[port]' => $database_port, 
-                '[user]' => $database_user, 
-                '[password]' => $database_pass, 
-                '[database]' => $database_name, 
+            $connectionUrl = strtr(self::DB_URL_TEMPLATE.'/[database]', [
+                '[host]' => $database_host,
+                '[port]' => $database_port,
+                '[user]' => $database_user,
+                '[password]' => $database_pass,
+                '[database]' => $database_name,
             ]);
 
             if (!empty($database_version)) {
@@ -268,18 +267,18 @@ class ConfigureHelpdesk extends AbstractController
             $application->setAutoExit(false);
 
             $returnCode = $application->run(new ArrayInput([
-                'command' => 'uvdesk_wizard:env:update', 
-                'name' => 'DATABASE_URL', 
-                'value' => $connectionUrl
+                'command' => 'uvdesk_wizard:env:update',
+                'name' => 'DATABASE_URL',
+                'value' => $connectionUrl,
             ]), new NullOutput());
-    
+
             if (0 === $returnCode) {
                 return new JsonResponse(['success' => true]);
             }
         } catch (\Exception $e) {
             return new JsonResponse([
                 'status' => false,
-                'message' => "An unexpected error occurred: " . $e->getMessage(), 
+                'message' => 'An unexpected error occurred: '.$e->getMessage(),
             ]);
         }
 
@@ -292,9 +291,9 @@ class ConfigureHelpdesk extends AbstractController
         $application->setAutoExit(false);
 
         $resultCode = $application->run(new ArrayInput([
-            'command' => 'uvdesk_wizard:database:migrate'
+            'command' => 'uvdesk_wizard:database:migrate',
         ]), new NullOutput());
-        
+
         return new Response(json_encode([]), 200, self::DEFAULT_JSON_HEADERS);
     }
 
@@ -313,7 +312,7 @@ class ConfigureHelpdesk extends AbstractController
 
     public function createDefaultSuperUserXHR(Request $request, UserPasswordEncoderInterface $encoder)
     {
-        if (session_status() == PHP_SESSION_NONE) {
+        if (PHP_SESSION_NONE == session_status()) {
             session_start();
         }
 
@@ -325,14 +324,14 @@ class ConfigureHelpdesk extends AbstractController
             'isActive' => true,
             'supportRole' => $role,
         ]);
-            
+
         if (empty($userInstance)) {
             list($name, $email, $password) = array_values($_SESSION['USER_DETAILS']);
             // Retrieve existing user or generate new empty user
             $accountExistsFlag = false;
             $user = $entityManager->getRepository(User::class)->findOneByEmail($email) ?: (new User())->setEmail($email);
 
-            if ($user->getId() != null) {
+            if (null != $user->getId()) {
                 $userInstance = $user->getAgentInstance();
 
                 if (!empty($userInstance)) {
@@ -354,11 +353,11 @@ class ConfigureHelpdesk extends AbstractController
                     ->setLastName(!empty($username[1]) ? $username[1] : '')
                     ->setPassword($encodedPassword)
                     ->setIsEnabled(true);
-                
+
                 $entityManager->persist($user);
                 $entityManager->flush();
             }
-            
+
             if (false == $accountExistsFlag) {
                 $userInstance = new UserInstance();
                 $userInstance->setSource('website');
@@ -378,9 +377,9 @@ class ConfigureHelpdesk extends AbstractController
     public function websiteConfigurationXHR(Request $request, UVDeskService $uvdesk)
     {
         switch ($request->getMethod()) {
-            case "GET":
+            case 'GET':
                 $currentWebsitePrefixCollection = $uvdesk->getCurrentWebsitePrefixes();
-                
+
                 if ($currentWebsitePrefixCollection) {
                     $result = $currentWebsitePrefixCollection;
                     $result['status'] = true;
@@ -388,11 +387,11 @@ class ConfigureHelpdesk extends AbstractController
                     $result['status'] = false;
                 }
                 break;
-            case "POST":
-                if (session_status() == PHP_SESSION_NONE) {
+            case 'POST':
+                if (PHP_SESSION_NONE == session_status()) {
                     session_start();
                 }
-                
+
                 $_SESSION['PREFIXES_DETAILS'] = [
                     'member' => $request->request->get('member-prefix'),
                     'customer' => $request->request->get('customer-prefix'),
@@ -409,11 +408,11 @@ class ConfigureHelpdesk extends AbstractController
 
     public function updateWebsiteConfigurationXHR(Request $request, UVDeskService $uvdesk)
     {
-        if (session_status() == PHP_SESSION_NONE) {
+        if (PHP_SESSION_NONE == session_status()) {
             session_start();
         }
 
-        $collectionURL= $uvdesk->updateWebsitePrefixes(
+        $collectionURL = $uvdesk->updateWebsitePrefixes(
             $_SESSION['PREFIXES_DETAILS']['member'],
             $_SESSION['PREFIXES_DETAILS']['customer']
         );

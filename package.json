@@ -1,0 +1,13 @@
+{
+    "devDependencies": {
+        "markdownlint-cli": "^0.35.0"
+    },
+    "license": "UNLICENSED",
+    "private": true,
+    "scripts": {
+        "coding-standards-check/markdownlint": "markdownlint --ignore LICENSE.md '*.md' docs/",
+        "coding-standards-check": "yarn run coding-standards-check/markdownlint",
+        "coding-standards-apply/markdownlint": "markdownlint --ignore LICENSE.md '*.md' docs/ --fix",
+        "coding-standards-apply": "yarn run coding-standards-apply/markdownlint"
+    }
+}

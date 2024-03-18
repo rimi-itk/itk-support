@@ -3,13 +3,12 @@ swiftmailer:
     mailers:
         dev:
             transport: smtp
-            username: 
-            password: 
+            username:
+            password:
             host: mail
             port: 1025
-            encryption: 
-            auth_mode: 
-            sender_address: 
+            encryption:
+            auth_mode:
+            sender_address:
             delivery_addresses: ['']
             disable_delivery: false
-

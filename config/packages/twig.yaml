@@ -20,3 +20,5 @@ twig:
         uvdesk_automations: '@uvdesk.automations'
         uvdesk_version: "%uvdesk.version%"
         uvdesk_core_version: "%uvdesk.core.version%"
+
+        admin_message: '%env(ADMIN_MESSAGE)%'
